@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-referral-collector"
+version = "0.1.0"
+description = "Collects referrals cited in LLM responses."
+requires-python = ">=3.13"
+dependencies = [
+    "pika>=1.4.4,<2",
+    "psycopg[binary]>=3.3,<4",
+    "pydantic>=2.12,<3",
+    "pydantic-settings==2.16.2",
+    "pyyaml==6.0.3",
+]
+
+[project.scripts]
+referral-collector = "referral_collector.cli:main"
+
+[[tool.uv.index]]
+url = "https://pypi.org/simple"
+default = true

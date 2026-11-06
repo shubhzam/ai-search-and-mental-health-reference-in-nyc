@@ -1,0 +1,6 @@
+**
+!pyproject.toml
+!uv.lock
+!src/
+!src/referral_collector/
+!src/referral_collector/*.py

@@ -1,0 +1,46 @@
+services:
+  collector:
+    build: .
+    environment:
+      REFERRAL_DATABASE_URL: postgresql://collector:local-dev@postgres:5432/collector
+      REFERRAL_RABBITMQ_URL: amqp://collector:local-dev@rabbitmq:5672/%2F
+      REFERRAL_STORAGE_DIR: /data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - collector-data:/data
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: collector
+      POSTGRES_PASSWORD: local-dev
+      POSTGRES_DB: collector
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "collector", "-d", "collector"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:4.2
+    environment:
+      RABBITMQ_DEFAULT_USER: collector
+      RABBITMQ_DEFAULT_PASS: local-dev
+    # Give RabbitMQ ownership of its disposable state and Erlang cookie directory.
+    tmpfs:
+      - /var/lib/rabbitmq:uid=999,gid=999,mode=0700
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_port_connectivity"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  collector-data:
+  postgres-data:
