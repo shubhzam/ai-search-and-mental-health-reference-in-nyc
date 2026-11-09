@@ -16,6 +16,7 @@ from yaml import YAMLError
 
 from .broker import check_broker, smoke_broker
 from .database import check_database
+from .pilot import run_pilot
 from .seed_preview import preview_jobs
 from .settings import Settings
 
@@ -39,7 +40,18 @@ def main() -> int:
     seed.add_argument("--prompt-count", type=int, default=48)
     seed.add_argument("--prompts", type=Path, default=Path("prompts.csv"))
     seed.add_argument("--models", type=Path, default=Path("models.yaml"))
+    pilot = commands.add_parser("pilot", help="Preview or run the live-search pilot")
+    pilot.add_argument("--prompt-id", required=True)
+    pilot.add_argument("--model", action="append", default=[], help="Select an exact model ID")
+    pilot.add_argument("--live", action="store_true", help="Make billable provider requests")
     args = parser.parse_args()
+
+    if args.command == "pilot":
+        try:
+            return run_pilot(args.prompt_id, args.model, args.live)
+        except (ValueError, OSError, KeyError, CSVError, YAMLError) as error:
+            print(f"Pilot failed: {error}", file=sys.stderr)
+            return 1
 
     if args.command == "seed":
         try:
