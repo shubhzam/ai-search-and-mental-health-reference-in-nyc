@@ -68,6 +68,20 @@ Prompt IDs: `g-080`, `g-219`, `g-162`, `g-006`, `g-333`, `g-172`, `g-415`, `g-25
 | Anthropic | 12 | $0.8950 |
 | OpenAI | 12 | $0.7024 |
 
+## November 14 supplemental batch
+
+Collected 10:40 AM to 10:40 AM EST. The batch used the next 12 unused prompts in the deterministic borough and payment ordering, with three prompts per payment condition. Gemini used an 8,192-token output limit, and Anthropic and OpenAI used 2,200. All requests used the shared study instruction and live search.
+
+Anthropic rejected the first request with a low API credit balance error. The runner saved the error response locally and stopped. Its ledger retains a $0.50 reservation for that attempt. The remaining 35 requests are pending. This batch added zero complete responses. Anthropic’s API credits must be restored before continuing the matched batch.
+
+Prompt IDs: `g-356`, `g-019`, `g-021`, `g-335`, `g-068`, `g-148`, `g-035`, `g-052`, `g-140`, `g-160`, `g-046`, `g-062`.
+
+| Provider | Verified complete responses | Estimated batch cost |
+|---|---:|---:|
+| Gemini | 0 | $0.0000 |
+| Anthropic | 0 | $0.0000 |
+| OpenAI | 0 | $0.0000 |
+
 ## Study progress and budget
 
 180 complete responses total, including 144 original study responses and 36 supplemental responses. Pilot attempts are excluded.
@@ -75,7 +89,7 @@ Prompt IDs: `g-080`, `g-219`, `g-162`, `g-006`, `g-333`, `g-172`, `g-415`, `g-25
 | Provider | Accounted pilot and collection spend | Outstanding reservation | Additional uncertainty allowance | Room under $9 operating limit |
 |---|---:|---:|---:|---:|
 | Gemini | $4.3703 | $0.00 | $0.01 | $4.6197 |
-| Anthropic | $5.0695 | $0.00 | $0.00 | $3.9305 |
+| Anthropic | $5.0695 | $0.50 | $0.00 | $3.4305 |
 | OpenAI | $3.8146 | $0.00 | $0.00 | $5.1854 |
 
 Spend is estimated from usage and includes the $0.50 Gemini provisional charge. The operating limit is $9 per provider, within a $10 total cap per provider. Raw responses and attempt records are retained locally in the ignored data directory.
