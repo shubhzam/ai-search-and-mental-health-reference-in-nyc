@@ -1,6 +1,11 @@
 services:
   collector:
     build: .
+    # Run as the host owner of the private bind-mounted response directories.
+    user: "${COLLECTOR_UID:-10001}:${COLLECTOR_GID:-10001}"
+    env_file:
+      - path: .env
+        required: false
     environment:
       REFERRAL_DATABASE_URL: postgresql://collector:local-dev@postgres:5432/collector
       REFERRAL_RABBITMQ_URL: amqp://collector:local-dev@rabbitmq:5672/%2F
@@ -11,7 +16,10 @@ services:
       rabbitmq:
         condition: service_healthy
     volumes:
-      - collector-data:/data
+      - ./data:/data
+      - ./prompts.csv:/app/prompts.csv:ro
+      - ./models.yaml:/app/models.yaml:ro
+      - ./docs/three-model-study:/app/docs/three-model-study:ro
 
   postgres:
     image: postgres:17
@@ -26,6 +34,8 @@ services:
       retries: 30
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
 
   rabbitmq:
     image: rabbitmq:4.2
@@ -40,7 +50,8 @@ services:
       interval: 2s
       timeout: 5s
       retries: 30
+    ports:
+      - "127.0.0.1:5672:5672"
 
 volumes:
-  collector-data:
   postgres-data:

@@ -57,11 +57,11 @@ def request_options(provider: str, model_id: str, prompt: str) -> dict:
     }
 
 
-def request_search(provider: str, key: str, options: dict, capture: Callable[[bytes], None]) -> None:
+def request_search(provider: str, key: str, options: dict, capture: Callable[[bytes, int], None]) -> None:
     """Pass the unparsed HTTP body to capture, including provider error bodies."""
     if provider == "gemini":
         def capture_response(response):
-            capture(response.read())
+            capture(response.read(), response.status_code)
 
         http_options = types.HttpOptions(
             timeout=90_000,
@@ -79,9 +79,9 @@ def request_search(provider: str, key: str, options: dict, capture: Callable[[by
             response = resource.with_raw_response.create(**options)
         except Exception as error:
             if (response := getattr(error, "response", None)) is not None:
-                capture(response.content)
+                capture(response.content, response.status_code)
             raise
-        capture(response.http_response.content)
+        capture(response.http_response.content, response.http_response.status_code)
 
 
 @dataclass(frozen=True)

@@ -1,0 +1,18 @@
+# Proposed three-model panel; original models.yaml remains the pilot panel.
+# Request settings and proposed dates are in the adjacent tech spec.
+models:
+- model_id: claude-sonnet-4-5-20250929
+  provider: anthropic
+  generation_rung: 1
+  active_from: '2026-11-07'
+  active_until: '2026-11-29'
+- model_id: gpt-4o-2024-08-06
+  provider: openai
+  generation_rung: 1
+  active_from: '2026-11-07'
+  active_until: '2026-12-20'
+- model_id: gemini-3.8-flash
+  provider: gemini
+  generation_rung: 4
+  active_from: '2026-11-07'
+  active_until: '2026-12-20'

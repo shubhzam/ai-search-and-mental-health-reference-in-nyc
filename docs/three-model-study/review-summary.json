@@ -1,0 +1,104 @@
+{
+  "start": "2026-11-10",
+  "end": "2026-11-13",
+  "proposed_time": "09:00 America/New_York",
+  "total_jobs": 144,
+  "jobs_per_provider": {
+    "anthropic": 48,
+    "gemini": 48,
+    "openai": 48
+  },
+  "balance": {
+    "borough": {
+      "Bronx": 9,
+      "Brooklyn": 10,
+      "Manhattan": 10,
+      "Queens": 10,
+      "Staten Island": 9
+    },
+    "payment_condition": {
+      "medicaid": 12,
+      "not_stated": 12,
+      "private_insurance": 12,
+      "uninsured": 12
+    },
+    "need": {
+      "alcohol_use": 7,
+      "teen_mental_health": 6,
+      "psychiatric_medication": 6,
+      "trauma": 8,
+      "grief": 7,
+      "depression": 4,
+      "postpartum_depression": 6,
+      "anxiety": 4
+    },
+    "paraphrase": {
+      "3": 18,
+      "2": 17,
+      "1": 13
+    },
+    "group": {
+      "rotation": 48
+    }
+  },
+  "cell_balance": {
+    "Bronx / medicaid": 3,
+    "Brooklyn / not_stated": 3,
+    "Manhattan / private_insurance": 3,
+    "Queens / uninsured": 3,
+    "Brooklyn / medicaid": 3,
+    "Manhattan / not_stated": 3,
+    "Queens / private_insurance": 3,
+    "Staten Island / uninsured": 3,
+    "Manhattan / medicaid": 2,
+    "Queens / not_stated": 2,
+    "Staten Island / private_insurance": 2,
+    "Bronx / uninsured": 2,
+    "Queens / medicaid": 2,
+    "Staten Island / not_stated": 2,
+    "Bronx / private_insurance": 2,
+    "Brooklyn / uninsured": 2,
+    "Staten Island / medicaid": 2,
+    "Bronx / not_stated": 2,
+    "Brooklyn / private_insurance": 2,
+    "Manhattan / uninsured": 2
+  },
+  "budget": [
+    {
+      "provider": "gemini",
+      "pilot_estimate": 0.1272355,
+      "uncertainty_allowance": 0.01,
+      "per_response": 0.0352915,
+      "study_48": 1.6939920000000002,
+      "total_estimate": 1.8312275000000002,
+      "headroom_to_9": 7.168772499999999,
+      "stress_2x_study": 3.5252195000000004
+    },
+    {
+      "provider": "anthropic",
+      "pilot_estimate": 0.340569,
+      "uncertainty_allowance": 0,
+      "per_response": 0.047359,
+      "study_48": 2.273232,
+      "total_estimate": 2.613801,
+      "headroom_to_9": 6.3861989999999995,
+      "stress_2x_study": 4.887033000000001
+    },
+    {
+      "provider": "openai",
+      "pilot_estimate": 0.31695324999999996,
+      "uncertainty_allowance": 0,
+      "per_response": 0.0580675,
+      "study_48": 2.78724,
+      "total_estimate": 3.1041932500000002,
+      "headroom_to_9": 5.89580675,
+      "stress_2x_study": 5.89143325
+    }
+  ],
+  "eligibility_negative_check": "Model 'claude-sonnet-4-5-20250929' must be eligible for the entire collection window",
+  "input_sha256": {
+    "prompts.csv": "1a765db8262fd05b31820558a550aa1bb6889896a0c63c3cf274633673cf814f",
+    "models.yaml": "61f2415bcf37bc68f23567dbc0d40d08e1d080e0f7c54f49b3543232d9cf51a7",
+    "docs/three-model-study/models.yaml": "e93eb8320121e2aa7664b3c386ddf869bd036c09f2e8319683a51443ea6faad8"
+  }
+}

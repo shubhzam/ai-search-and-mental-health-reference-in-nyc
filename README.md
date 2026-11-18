@@ -101,50 +101,91 @@ flowchart LR
     class ACK queue
 ```
 
-The watcher, execution tables, queue workers, and export are planned. The [design walkthrough](docs/referral-collector-design.html) covers scheduling, failure recovery, and the data model in more detail.
+The watcher, queue workers, and export are planned. The manual collector uses PostgreSQL execution and attempt tables. The [design walkthrough](docs/referral-collector-design.html) covers scheduling, failure recovery, and the data model in more detail.
 
-## What runs today · manual collection
+## Manual collection and PostgreSQL storage
 
-```mermaid
----
-config:
-  look: handDrawn
-  handDrawnSeed: 42
-  theme: base
-  themeVariables:
-    fontFamily: 'Comic Sans MS, Trebuchet MS, sans-serif'
-    lineColor: '#64748b'
-    textColor: '#1e293b'
-    edgeLabelBackground: '#f8fafc'
-  flowchart:
-    curve: basis
----
-flowchart TB
-    SPEC["Reviewed study inputs"] --> SEED["Seed CLI"]
-    SEED --> PG[("PostgreSQL<br/>144 planned jobs")]
-    SPEC --> BATCH["Manual batch runner"]
-    BATCH <-.->|"Live search"| API(("Provider APIs"))
-    BATCH --> FILES[("Local data/<br/>Raw JSON + UTC attempt records")]
-    FILES --> REPORT["Verified results summary"]
-
-    classDef input fill:#fff1c2,stroke:#b7791f,color:#422006,stroke-width:2px
-    classDef service fill:#dbeafe,stroke:#3b66a1,color:#172554,stroke-width:2px
-    classDef api fill:#f3e8ff,stroke:#8857a6,color:#3b0764,stroke-width:2px
-    classDef store fill:#ccfbf1,stroke:#277b75,color:#042f2e,stroke-width:2px
-    class SPEC input
-    class SEED,BATCH,REPORT service
-    class API api
-    class PG,FILES store
-```
-
-PostgreSQL holds the planned prompt, model, and date assignments. The manual batches use the reviewed assignments and call providers directly. Docker Compose provides PostgreSQL and RabbitMQ locally, and the current batches run independently of RabbitMQ.
+Pilot and batch commands reserve spend in PostgreSQL before every provider request. The collector syncs the raw HTTP bytes to host-visible storage, then commits the attempt status, response or error JSON, SHA-256, timing, usage, and estimated charge. An execution groups the original attempt with any explicit retries. The manual commands call providers directly. RabbitMQ is available for the planned scheduler.
 
 | Location | What it stores |
 |---|---|
-| PostgreSQL `job_definitions` | 144 scheduled job definitions |
-| `data/collection/<batch>/<execution>/` | `response.json` with the raw provider response and `attempt.json` with the request, planned date, UTC start and finish times, usage, outcome, and estimated cost |
-| `data/collection/<batch>/` | The batch plan and status summary |
-| `data/pilot/` | Earlier pilot requests, responses, and usage records |
-| [`docs/collection-results.md`](docs/collection-results.md) | Verified progress and budget summary published to GitHub |
+| PostgreSQL `job_definitions` | The 144 original scheduled assignments |
+| PostgreSQL `executions` and `attempts` | Pilot and collection history, including supplemental executions, request and response JSON, timestamps and spend |
+| `data/collection/` and `data/pilot/` | Historical raw bytes and ledgers, with collection plans |
+| `data/live/` | New raw bytes, capture receipts and batch plans |
 
-The `data/` directory and `.env` are ignored by Git. The collector counts pilot and study attempts against a $9 operating limit within the $10 cap per provider. An uncertain charge stays accounted for until it can be reconciled.
+The saved inventory contains 254 collection attempts and 17 pilot attempts. The collection has 84 fully matched prompts and 84 successful responses per provider. See [the collection summary](docs/collection-results.md) for the SQL verification environment and budget figures.
+
+### Start services and import history
+
+Run from the repository root with Python 3.13. Keep provider keys in the ignored `.env` and preserve the ignored `data/` directory.
+
+```sh
+uv sync --locked --python 3.13
+docker compose up -d --wait postgres rabbitmq
+uv run --locked --python 3.13 referral-collector health
+docker compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U collector -d collector -c '\dt' -c 'SELECT count(*) FROM job_definitions'
+docker compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U collector -d collector < migrations/002_collection_persistence.sql
+uv run --locked --python 3.13 referral-collector import-collection --dry-run
+uv run --locked --python 3.13 referral-collector import-collection --apply
+uv run --locked --python 3.13 referral-collector import-collection --apply
+```
+
+Apply migration 002 once to the existing collector database. An identical second import reports `inserted=0 unchanged=271` for the November 18 snapshot. A changed or missing imported source aborts the import. Restore the original files or explicitly reconcile the historical record before proceeding.
+
+### Launch future runs
+
+```sh
+# Preview a pilot, then add --live when ready for billable requests.
+uv run --locked --python 3.13 referral-collector pilot --prompt-id anc-03 --model gpt-4o-2024-08-06
+
+# Preview the original schedule. Existing attempts cannot be dispatched again.
+uv run --locked --python 3.13 referral-collector batch --planned-date 2026-11-10 --prompt-count 1 --batch-id scheduled-preview
+
+# Example supplemental plan. Supply the planned date and reviewed, unused prompt IDs.
+uv run --locked --python 3.13 referral-collector batch --planned-date 2026-11-18 \
+  --prompt-id g-001 --gemini-output-tokens 8192 --batch-id supplemental-preview \
+  --write-plan data/supplemental-preview.json
+
+# Run a reviewed plan containing new attempts.
+uv run --locked --python 3.13 referral-collector batch --plan data/new-batch-plan.json --batch-id new-batch --live
+
+# Recover saved responses after a persistence interruption.
+uv run --locked --python 3.13 referral-collector recover-collection
+```
+
+Use a stable batch ID when resuming a live batch. A saved historical plan can be copied and trimmed to unattempted entries. For a deliberate retry, keep the original planned date and request identity, set `retry_of` to the original execution key, and give the attempt key a new `__retry-N` suffix. Save it as a new plan and use a new batch ID. The runner accepts an explicit retry for a failed original with cleared reservations. The eligible model windows come from the reviewed manifest.
+
+With Docker, the same files appear at `/data`. Match the container user to the host owner of the private response directories.
+
+```sh
+COLLECTOR_UID="$(id -u)" COLLECTOR_GID="$(id -g)" docker compose run --rm --build collector \
+  batch --plan /data/new-batch-plan.json --batch-id new-batch --live
+```
+
+If the database fails before dispatch, the command stops. If it fails after capture, run `recover-collection` after restoring connectivity. A pending attempt without saved bytes keeps its reservation and requires provider-side reconciliation. The collector uses a shared $9 operating limit and a $0.50 per-attempt reservation within the $10 project cap per provider. The budget includes pilots, provisional charges, retries and supplemental work. Usage-based estimates can differ from provider invoices.
+
+### Inspect the saved responses
+
+```sql
+SELECT e.prompt_id, e.provider, e.planned_date, a.finished_at, a.response
+FROM executions e JOIN attempts a USING (execution_id)
+WHERE e.scope = 'collection' AND a.status = 'passed'
+ORDER BY e.prompt_id, e.provider;
+
+SELECT e.execution_id, a.attempt_key, a.retry_of, a.status, a.started_at,
+       a.finished_at, a.estimated_usd, a.reserved_usd, a.accounting_note,
+       a.raw_path, a.raw_sha256
+FROM executions e JOIN attempts a USING (execution_id)
+WHERE e.execution_id = '2026-11-11__g-290__gemini-3.8-flash'
+ORDER BY a.started_at;
+```
+
+Run the fake-provider tests with a database user that can create disposable schemas.
+
+```sh
+REFERRAL_TEST_DATABASE_URL=postgresql://collector:local-dev@localhost:5432/collector \
+  uv run --locked --python 3.13 python -m unittest discover -s tests -v
+```
+
+See [the import and recovery design](docs/collection-db-import/04-automatic-persistence-and-recovery.md).

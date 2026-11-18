@@ -3,6 +3,7 @@ FROM python:3.13-slim
 
 COPY --from=uv /uv /usr/local/bin/uv
 ENV UV_PYTHON_DOWNLOADS=never
+ENV UV_CACHE_DIR=/tmp/referral-uv-cache
 WORKDIR /app
 
 COPY pyproject.toml uv.lock ./

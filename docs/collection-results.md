@@ -72,7 +72,7 @@ Prompt IDs: `g-080`, `g-219`, `g-162`, `g-006`, `g-333`, `g-172`, `g-415`, `g-25
 
 Collected 10:40 AM to 10:40 AM EST. The batch used the next 12 unused prompts in the deterministic borough and payment ordering, with three prompts per payment condition. Gemini used an 8,192-token output limit, and Anthropic and OpenAI used 2,200. All requests used the shared study instruction and live search.
 
-Anthropic rejected the first request with a low API credit balance error. The runner saved the error response locally and stopped. Its ledger retains a $0.50 reservation for that attempt. The remaining 35 requests are pending. This batch added zero complete responses. Anthropic’s API credits must be restored before continuing the matched batch.
+Anthropic rejected the first request with a low API credit balance error. The runner saved the error response locally and stopped. The remaining 35 requests were pending when that batch stopped. The original reservation was later moved to a $0.50 provisional charge, and Claude collection resumed after credentials were updated.
 
 Prompt IDs: `g-356`, `g-019`, `g-021`, `g-335`, `g-068`, `g-148`, `g-035`, `g-052`, `g-140`, `g-160`, `g-046`, `g-062`.
 
@@ -82,14 +82,29 @@ Prompt IDs: `g-356`, `g-019`, `g-021`, `g-335`, `g-068`, `g-148`, `g-035`, `g-05
 | Anthropic | 0 | $0.0000 |
 | OpenAI | 0 | $0.0000 |
 
-## Study progress and budget
+## November 17–18 supplemental collection
 
-180 complete responses total, including 144 original study responses and 36 supplemental responses. Pilot attempts are excluded.
+The November 17 morning run saved 24 complete Gemini and OpenAI responses. Claude catch-up saved 12 complete responses that evening, including the retry for `g-356`. November 18 added 36 complete responses across 12 more prompts. Together these runs added 24 fully matched prompts.
+
+## Verified inventory and storage
+
+| Scope | Executions | Attempts | Successful responses | With response JSON | Fully matched prompts |
+|---|---:|---:|---:|---:|---:|
+| Collection | 252 | 254 | 252 | 254 | 84 |
+| Pilot | 17 | 17 | 9 | 17 | 1 |
+
+The collection includes 144 executions matching the original schedule and 108 supplemental executions. Each provider contributed 84 successful collection responses. Two executions have a second attempt: Gemini `g-290` (incomplete → passed) and Claude `g-356` (rejected → passed). All 17 pilot finish timestamps are unknown and stored as null.
+
+The November 18 file audit and an isolated PostgreSQL 17.5 engine reproduced these counts. The first import inserted 271 attempts. The second inserted zero and reported 271 unchanged. Docker access was blocked during the verification session, so the local collector database still requires migration and import. See [the README](../README.md) for the commands.
+
+New pilot and batch runs reserve spend in PostgreSQL before dispatch, save immutable raw bytes under `data/live/`, and commit the terminal outcome and full parsed response in PostgreSQL. Interrupted writes can recover from saved bytes. The historical ledgers and responses remain under `data/collection/` and `data/pilot/`.
+
+## Shared provider budget
 
 | Provider | Accounted pilot and collection spend | Outstanding reservation | Additional uncertainty allowance | Room under $9 operating limit |
 |---|---:|---:|---:|---:|
-| Gemini | $4.3703 | $0.00 | $0.01 | $4.6197 |
-| Anthropic | $5.0695 | $0.50 | $0.00 | $3.4305 |
-| OpenAI | $3.8146 | $0.00 | $0.00 | $5.1854 |
+| Gemini | $5.9337 | $0.00 | $0.01 | $3.0563 |
+| Anthropic | $7.3934 | $0.00 | $0.00 | $1.6066 |
+| OpenAI | $5.2070 | $0.00 | $0.00 | $3.7930 |
 
-Spend is estimated from usage and includes the $0.50 Gemini provisional charge. The operating limit is $9 per provider, within a $10 total cap per provider. Raw responses and attempt records are retained locally in the ignored data directory.
+Estimates include the $0.50 Gemini and $0.50 Anthropic provisional charges. The project uses a $9 operating limit within the $10 total cap per provider.
