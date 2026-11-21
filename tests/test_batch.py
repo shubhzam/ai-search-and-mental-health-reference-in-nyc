@@ -25,7 +25,7 @@ from referral_collector.persistence import digest, import_attempts, inventory
 
 def response():
     return json.dumps({
-        "model": batch.PANEL["openai"], "id": "fixture-response", "status": "completed",
+        "model": batch.PANEL["openai"], "id": "fixture-response", "status": "completed", "error": None,
         "usage": {"input_tokens": 100, "output_tokens": 100},
         "output": [{"type": "web_search_call", "status": "completed", "action": {"type": "search"}}],
     }).encode()

@@ -90,21 +90,29 @@ The November 17 morning run saved 24 complete Gemini and OpenAI responses. Claud
 
 | Scope | Executions | Attempts | Successful responses | With response JSON | Fully matched prompts |
 |---|---:|---:|---:|---:|---:|
-| Collection | 252 | 254 | 252 | 254 | 84 |
+| Collection | 306 | 308 | 306 | 308 | 102 |
 | Pilot | 17 | 17 | 9 | 17 | 1 |
 
-The collection includes 144 executions matching the original schedule and 108 supplemental executions. Each provider contributed 84 successful collection responses. Two executions have a second attempt: Gemini `g-290` (incomplete → passed) and Claude `g-356` (rejected → passed). All 17 pilot finish timestamps are unknown and stored as null.
+The collection includes 144 executions matching the original schedule and 162 supplemental executions. Each provider contributed 102 successful collection responses. Two executions have a second attempt: Gemini `g-290` (incomplete → passed) and Claude `g-356` (rejected → passed). All 17 pilot finish timestamps are unknown and stored as null.
 
-The November 18 file audit and an isolated PostgreSQL 17.5 engine reproduced these counts. The first import inserted 271 attempts. The second inserted zero and reported 271 unchanged. Docker access was blocked during the verification session, so the local collector database still requires migration and import. See [the README](../README.md) for the commands.
+On November 19, migration 002 was applied to the local Docker PostgreSQL database. The historical import inserted 271 attempts; a second import inserted zero. New manual runs now persist directly to that database. The November 20 audit verified all 325 raw response files against database hashes and JSON bodies, including pilots and failed attempts. PostgreSQL uses the persistent `project_postgres-data` volume with fsync and synchronous_commit enabled. A separate backup/restore test remains pending.
 
 New pilot and batch runs reserve spend in PostgreSQL before dispatch, save immutable raw bytes under `data/live/`, and commit the terminal outcome and full parsed response in PostgreSQL. Interrupted writes can recover from saved bytes. The historical ledgers and responses remain under `data/collection/` and `data/pilot/`.
 
+## November 19–20 collection
+
+November 19 added 36 complete responses across 12 prompts. November 20 added nine responses across three prompts, followed by three single-prompt runs. The collection now has 306 complete responses across 102 matched prompts, with 102 successful responses per provider. All 54 new responses have PostgreSQL request and response JSON, usage, raw-file hashes, and actual start/finish timestamps.
+
+OpenAI's valid null error field initially caused one successful response to be classified as unresolved. The parser check was fixed and the stored raw response was reconciled without repeating the provider request. All 19 fake-provider and database tests passed after adding null-error coverage.
+
+The November 20 single-prompt runs used temporary reservations of $0.40 and $0.30. The final single-prompt run used the standard $0.50 reservation with an explicitly authorized operating-threshold override, bounded by the $10 provider cap. These overrides were process-local and are recorded in the saved plans.
+
 ## Shared provider budget
 
-| Provider | Accounted pilot and collection spend | Outstanding reservation | Additional uncertainty allowance | Room under $9 operating limit |
+| Provider | Accounted pilot and collection spend | Outstanding reservation | Additional uncertainty allowance | Room under $10 cap |
 |---|---:|---:|---:|---:|
-| Gemini | $5.9337 | $0.00 | $0.01 | $3.0563 |
-| Anthropic | $7.3934 | $0.00 | $0.00 | $1.6066 |
-| OpenAI | $5.2070 | $0.00 | $0.00 | $3.7930 |
+| Gemini | $7.0438 | $0.00 | $0.01 | $2.9462 |
+| Anthropic | $8.7949 | $0.00 | $0.00 | $1.2051 |
+| OpenAI | $6.2482 | $0.00 | $0.00 | $3.7518 |
 
-Estimates include the $0.50 Gemini and $0.50 Anthropic provisional charges. The project uses a $9 operating limit within the $10 total cap per provider.
+Estimates include the $0.50 Gemini and $0.50 Anthropic provisional charges. The default operating limit is $9 per provider within the $10 total cap. Raw data and credentials stay in ignored local storage.

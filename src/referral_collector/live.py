@@ -111,7 +111,7 @@ def terminal_attempt(data: Path, attempt: Attempt, transport_error=None, started
     record["status"] = "unresolved"
     if status_code in REJECTED_HTTP:
         record.update(status="rejected", reserved_usd=0)
-    elif response and (status_code is None or 200 <= status_code < 300) and "error" not in response:
+    elif response and (status_code is None or 200 <= status_code < 300) and response.get("error") is None:
         try:
             observation = observe(record["provider"], record["requested_model"], response)
             if record["provider"] == "gemini" and "candidatesTokenCount" not in observation.usage:
