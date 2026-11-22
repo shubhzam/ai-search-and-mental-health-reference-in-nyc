@@ -114,7 +114,7 @@ Pilot and batch commands reserve spend in PostgreSQL before every provider reque
 | `data/collection/` and `data/pilot/` | Historical raw bytes and ledgers, with collection plans |
 | `data/live/` | New raw bytes, capture receipts and batch plans |
 
-The database contains 308 collection attempts and 17 pilot attempts as of November 20. The collection has 102 fully matched prompts and 102 successful responses per provider. See [the collection summary](docs/collection-results.md) for the SQL verification environment and budget figures.
+The database contains 314 collection attempts and 17 pilot attempts as of November 21. The collection has 104 fully matched prompts and 104 successful responses per provider. See [the collection summary](docs/collection-results.md) for the SQL verification environment and budget figures.
 
 ### Start services and import history
 

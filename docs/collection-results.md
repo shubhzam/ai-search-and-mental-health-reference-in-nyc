@@ -90,10 +90,10 @@ The November 17 morning run saved 24 complete Gemini and OpenAI responses. Claud
 
 | Scope | Executions | Attempts | Successful responses | With response JSON | Fully matched prompts |
 |---|---:|---:|---:|---:|---:|
-| Collection | 306 | 308 | 306 | 308 | 102 |
+| Collection | 312 | 314 | 312 | 314 | 104 |
 | Pilot | 17 | 17 | 9 | 17 | 1 |
 
-The collection includes 144 executions matching the original schedule and 162 supplemental executions. Each provider contributed 102 successful collection responses. Two executions have a second attempt: Gemini `g-290` (incomplete → passed) and Claude `g-356` (rejected → passed). All 17 pilot finish timestamps are unknown and stored as null.
+The collection includes 144 executions matching the original schedule and 168 supplemental executions. Each provider contributed 104 successful collection responses. Two executions have a second attempt: Gemini `g-290` (incomplete → passed) and Claude `g-356` (rejected → passed). All 17 pilot finish timestamps are unknown and stored as null.
 
 On November 19, migration 002 was applied to the local Docker PostgreSQL database. The historical import inserted 271 attempts; a second import inserted zero. New manual runs now persist directly to that database. The November 20 audit verified all 325 raw response files against database hashes and JSON bodies, including pilots and failed attempts. PostgreSQL uses the persistent `project_postgres-data` volume with fsync and synchronous_commit enabled. A separate backup/restore test remains pending.
 
@@ -107,12 +107,18 @@ OpenAI's valid null error field initially caused one successful response to be c
 
 The November 20 single-prompt runs used temporary reservations of $0.40 and $0.30. The final single-prompt run used the standard $0.50 reservation with an explicitly authorized operating-threshold override, bounded by the $10 provider cap. These overrides were process-local and are recorded in the saved plans.
 
+## November 21 collection
+
+The morning and evening runs added one unused matched prompt each, g-258 and g-277. All six responses passed and are stored in PostgreSQL with raw files, timestamps, usage, and checksums. The collection now has 312 complete responses across 104 matched prompts, 104 per provider. The final audit checked 331 raw files including pilots and unsuccessful attempts.
+
+The morning run used a disclosed $0.20 reservation. The evening run used the standard $0.50 reservation with the authorized process-local operating-threshold override bounded by the $10 total provider cap. Raw plans record the settings.
+
 ## Shared provider budget
 
 | Provider | Accounted pilot and collection spend | Outstanding reservation | Additional uncertainty allowance | Room under $10 cap |
 |---|---:|---:|---:|---:|
-| Gemini | $7.0438 | $0.00 | $0.01 | $2.9462 |
-| Anthropic | $8.7949 | $0.00 | $0.00 | $1.2051 |
-| OpenAI | $6.2482 | $0.00 | $0.00 | $3.7518 |
+| Gemini | $7.1600 | $0.00 | $0.01 | $2.8300 |
+| Anthropic | $8.9742 | $0.00 | $0.00 | $1.0258 |
+| OpenAI | $6.3625 | $0.00 | $0.00 | $3.6375 |
 
 Estimates include the $0.50 Gemini and $0.50 Anthropic provisional charges. The default operating limit is $9 per provider within the $10 total cap. Raw data and credentials stay in ignored local storage.
