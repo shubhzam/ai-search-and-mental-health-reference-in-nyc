@@ -31,6 +31,30 @@ ENTRY_FIELDS = {
     "planned_date", "active_from", "active_until", "request",
 }
 
+CARBON_REVIEW = Path("docs/gemini-carbon-pilot/review-manifest.json")
+
+
+def build_carbon_plan() -> dict:
+    """Build only the approved twelve-question Carbon comparison."""
+    review = read_object(CARBON_REVIEW.read_bytes())
+    today = datetime.now(ZoneInfo("America/New_York")).date()
+    plan = build_plan(date(2026, 11, 10), 1, review["prompt_ids"], gemini_limit=8192)
+    entries = []
+    for entry in plan["executions"]:
+        if entry["provider"] != "gemini":
+            continue
+        entry["requested_model"] = "gemini-4-carbon"
+        entry["planned_date"] = today.isoformat()
+        entry["execution_key"] = f"{today}__{entry['prompt_id']}__gemini-4-carbon"
+        entry["active_from"] = "2026-11-24"
+        entry["active_until"] = "2026-11-30"
+        entry["request"]["model"] = "gemini-4-carbon"
+        entries.append(entry)
+    plan.update(executions=entries, cohort="gemini-carbon-pilot",
+                pilot_manifest_sha256=digest(CARBON_REVIEW.read_bytes()),
+                timing_deviation="Carbon pilot collected later than its Flash baselines")
+    return plan
+
 
 def build_plan(planned_date: date, count: int, prompt_ids=(), gemini_limit: int = 2200) -> dict:
     if prompt_ids and (len(prompt_ids) > 12 or len(set(prompt_ids)) != len(prompt_ids)):
@@ -84,6 +108,20 @@ def validate_plan(plan: dict) -> list[dict]:
             raise ValueError(f"Reviewed input hash mismatch: {name}")
     models = ModelManifest.model_validate(yaml.safe_load((review / "models.yaml").read_text())).models
     model_dates = {m.model_id: (str(m.active_from), str(m.active_until)) for m in models}
+    panel = PANEL
+    carbon = plan.get("cohort") == "gemini-carbon-pilot"
+    if carbon:
+        manifest = read_object(CARBON_REVIEW.read_bytes())
+        if (plan.get("pilot_manifest_sha256") != digest(CARBON_REVIEW.read_bytes())
+                or manifest["source_prompt_sha256"] != digest(Path("prompts.csv").read_bytes())
+                or len(executions) != 12
+                or [e["prompt_id"] for e in executions] != manifest["prompt_ids"]):
+            raise ValueError("Carbon pilot differs from its reviewed manifest")
+        for baseline in manifest["baseline_responses"]:
+            if digest(Path(baseline["raw_path"]).read_bytes()) != baseline["raw_sha256"]:
+                raise ValueError("Carbon baseline checksum mismatch")
+        panel = {"gemini": "gemini-4-carbon"}
+        model_dates = {"gemini-4-carbon": ("2026-11-24", "2026-11-30")}
     with Path("prompts.csv").open(encoding="utf-8-sig", newline="") as source:
         prompts = {r["prompt_id"]: r["prompt_text"] for r in csv.DictReader(source)}
     keys = set()
@@ -98,8 +136,8 @@ def validate_plan(plan: dict) -> list[dict]:
         attempt_key = entry["execution_key"]
         retry = entry.get("retry_of")
         if (not EXECUTION_KEY.fullmatch(attempt_key) or attempt_key in keys
-                or (entry["active_from"], entry["active_until"]) != model_dates[model]
-                or PANEL[provider] != model):
+                or (entry["active_from"], entry["active_until"]) != model_dates.get(model)
+                or panel.get(provider) != model):
             raise ValueError("Invalid or duplicate execution identity")
         if retry:
             if retry != original or not re.fullmatch(re.escape(original) + r"__retry-[1-9][0-9]*", attempt_key):
@@ -112,6 +150,8 @@ def validate_plan(plan: dict) -> list[dict]:
             requested_limit = entry["request"]["config"]["max_output_tokens"]
             if requested_limit not in (2200, 8192):
                 raise ValueError("Unsupported Gemini token limit")
+            if carbon and requested_limit != 8192:
+                raise ValueError("Carbon pilot requires 8192 output tokens")
             options["config"]["max_output_tokens"] = requested_limit
         else:
             options["max_tokens" if provider == "anthropic" else "max_output_tokens"] = 2200

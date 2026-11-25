@@ -88,16 +88,16 @@ The November 17 morning run saved 24 complete Gemini and OpenAI responses. Claud
 
 ## Verified inventory and storage
 
-| Scope | Executions | Attempts | Successful responses | With response JSON | Fully matched prompts |
-|---|---:|---:|---:|---:|---:|
-| Collection | 312 | 314 | 312 | 314 | 104 |
-| Pilot | 17 | 17 | 9 | 17 | 1 |
+The November 25 PostgreSQL/raw-file audit verified 589 raw response files against stored checksums and parsed database response JSON. The database contains 572 collection attempts and 17 pilot attempts, including 568 complete collection responses. Pilot responses are counted separately. PostgreSQL uses the persistent project_postgres-data Docker volume. Migration 002 and the historical import have been applied locally, and live collection persists directly to PostgreSQL and data/live/.
 
-The collection includes 144 executions matching the original schedule and 168 supplemental executions. Each provider contributed 104 successful collection responses. Two executions have a second attempt: Gemini `g-290` (incomplete → passed) and Claude `g-356` (rejected → passed). All 17 pilot finish timestamps are unknown and stored as null.
+| Model | Complete collection responses |
+|---|---:|
+| Gemini 3.8 Flash | 200 |
+| Claude Sonnet 4.5 | 188 |
+| GPT-4o | 168 |
+| Gemini 4 Carbon pilot | 12 |
 
-On November 19, migration 002 was applied to the local Docker PostgreSQL database. The historical import inserted 271 attempts; a second import inserted zero. New manual runs now persist directly to that database. The November 20 audit verified all 325 raw response files against database hashes and JSON bodies, including pilots and failed attempts. PostgreSQL uses the persistent `project_postgres-data` volume with fsync and synchronous_commit enabled. A separate backup/restore test remains pending.
-
-New pilot and batch runs reserve spend in PostgreSQL before dispatch, save immutable raw bytes under `data/live/`, and commit the terminal outcome and full parsed response in PostgreSQL. Interrupted writes can recover from saved bytes. The historical ledgers and responses remain under `data/collection/` and `data/pilot/`.
+The original three-model panel has 168 fully matched prompts out of the 200-prompt target. Twelve Claude and 32 OpenAI responses are still needed. Provider credit rejections interrupted their collection. The twelve Carbon responses are additional answers to existing questions and retain their own model identity.
 
 ## November 19–20 collection
 
@@ -113,12 +113,16 @@ The morning and evening runs added one unused matched prompt each, g-258 and g-2
 
 The morning run used a disclosed $0.20 reservation. The evening run used the standard $0.50 reservation with the authorized process-local operating-threshold override bounded by the $10 total provider cap. Raw plans record the settings.
 
-## Shared provider budget
+## November 22–25 collection and Carbon pilot
 
-| Provider | Accounted pilot and collection spend | Outstanding reservation | Additional uncertainty allowance | Room under $10 cap |
-|---|---:|---:|---:|---:|
-| Gemini | $7.1600 | $0.00 | $0.01 | $2.8300 |
-| Anthropic | $8.9742 | $0.00 | $0.00 | $1.0258 |
-| OpenAI | $6.3625 | $0.00 | $0.00 | $3.6375 |
+Further normal batches expanded the original panel to 200 distinct prompts. OpenAI and Claude later returned explicit credit-balance rejections. Gemini Flash reached 200 complete responses. Saved plans retain the missing original-model assignments for catchup. Actual UTC timestamps distinguish the collection dates.
 
-Estimates include the $0.50 Gemini and $0.50 Anthropic provisional charges. The default operating limit is $9 per provider within the $10 total cap. Raw data and credentials stay in ignored local storage.
+After approving the documented Carbon plan, the user authorized twelve gemini-4-carbon requests on previously collected questions with an 8,192-token Flash baseline. All twelve passed with visible answers, search evidence, usable token counts, matching requested/returned model identity, and verified database/raw-file persistence. Reopening the completed pilot sent zero new requests. See [the Carbon results](gemini-carbon-pilot/04-results.md).
+
+## Shared provider accounting
+
+The user explicitly removed the application spend limits on November 22 and directed collection to stop on API credit rejection or failure. Subsequent finite batches used that authorization. The default code constant remains $9, while those runs used a recorded process-local override.
+
+Our ledger counts gross search charges before free allowances and includes provisional historical costs. It must not be interpreted as a billing balance. The November 24 Google AI Studio screenshot showed $1.61 in monthly project spend, while the ledger estimated $13.31. The difference was primarily $11.17 in estimated search charges plus a $0.50 provision. The Carbon pilot added about $0.21 in estimated token charges, or $1.11 gross before its search allowance. Actual charges require provider billing reconciliation.
+
+Raw responses, usage records and credentials remain in ignored local storage. Only code, reviewed manifests, tests and summary documentation are published.

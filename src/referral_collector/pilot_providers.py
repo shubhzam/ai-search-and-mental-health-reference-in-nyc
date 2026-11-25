@@ -25,6 +25,8 @@ RATES = {
     "gemini-3-flash-preview": (0.50, 3),
     "gemini-3.6-flash": (0.75, 3.75),
     "gemini-3.8-flash": (0.75, 3.75),
+    # Introductory standard pricing through November 30, 2026 only.
+    "gemini-4-carbon": (2, 10),
 }
 
 
@@ -145,6 +147,12 @@ def observe(provider: str, model_id: str, response: dict) -> Observation:
         billed_input = usage["promptTokenCount"] + usage.get("toolUsePromptTokenCount", 0)
         billed_output = usage.get("candidatesTokenCount", 0) + usage.get("thoughtsTokenCount", 0)
         complete = candidate.get("finishReason") == "STOP"
+        if model_id == "gemini-4-carbon":
+            visible = any(
+                part.get("text", "").strip() and not part.get("thought")
+                for part in (candidate.get("content") or {}).get("parts", [])
+            )
+            complete = complete and visible and response.get("modelVersion") == model_id
         # Price without free grounding allowances so the estimate errs high.
         tool_cost = 0.035 * bool(searches) if model_id == "gemini-2.5-flash" else 0.014 * searches
 
