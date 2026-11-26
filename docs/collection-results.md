@@ -88,19 +88,19 @@ The November 17 morning run saved 24 complete Gemini and OpenAI responses. Claud
 
 ## Verified inventory and storage
 
-The November 26 PostgreSQL/raw-file audit verified all 676 raw response files against stored checksums and parsed database response JSON. The database contains 659 collection attempts and 17 pilot attempts, including 652 complete collection responses. Pilot responses are counted separately. PostgreSQL uses the persistent project_postgres-data Docker volume. Migration 002 and the historical import have been applied locally, and live collection persists directly to PostgreSQL and data/live/.
+The November 26 PostgreSQL/raw-file audit verified all 716 raw response files against stored checksums and parsed database response JSON. The database contains 699 collection attempts and 17 pilot attempts, including 690 complete collection responses. Pilot responses are counted separately. PostgreSQL uses the persistent project_postgres-data Docker volume. Migration 002 and the historical import have been applied locally, and live collection persists directly to PostgreSQL and data/live/.
 
 | Model | Complete collection responses |
 |---|---:|
 | Gemini 3.8 Flash | 200 |
 | Claude Sonnet 4.5 | 188 |
 | GPT-4o | 168 |
-| Gemini 4 Carbon | 24 |
-| Gemini 4 Neon | 24 |
-| Gemini 4 Hydrogen | 24 |
-| Gemini 4 Argon | 24 |
+| Gemini 4 Carbon | 26 |
+| Gemini 4 Neon | 36 |
+| Gemini 4 Hydrogen | 36 |
+| Gemini 4 Argon | 36 |
 
-The original panel has 168 fully matched prompts out of the 200-prompt target. Twelve Claude and 32 OpenAI responses remain missing. Carbon, Neon, Hydrogen and Argon each answered the same 24 existing questions; these additional model responses do not fill the original-model gaps.
+The original panel has 168 fully matched prompts out of the 200-prompt target. Twelve Claude and 32 OpenAI responses remain missing. Neon, Hydrogen and Argon share 36 existing questions; Carbon shares 26 of those. These additional model responses do not fill the original-model gaps.
 
 ## November 19–20 collection
 
@@ -135,3 +135,7 @@ Raw responses, usage records and credentials remain in ignored local storage. On
 Carbon's afternoon and night continuation increased its completed set from 12 to 24. One saved deadline error was retained with a provisional charge and followed by a successful linked retry. The user then explicitly authorized Neon, Hydrogen and Argon to match Carbon's count tonight. Each completed all 24 prompts November 26. Hydrogen retained two partial MAX_TOKENS attempts and completed each on its single linked retry.
 
 The expansion added 72 successful responses across 74 attempts, with estimated token charges of $3.638274 including partials. All new files and database records passed validation, and reopening the saved plans made zero provider calls. See [the paired Gemini 4 results](gemini4-comparison/04-results.md) for model counts, costs, actual timing and limitations.
+
+## November 26 noon run
+
+The user selected twelve new matched prompts on Neon, Hydrogen and Argon only. All 36 requested responses completed and passed the persistence audit. Two Carbon calls that started before the selection arrived were preserved separately; Carbon was then stopped. Two saved Neon deadline errors each received one successful linked retry, with their original accounting provisions retained. Subsequent daily requests used a recorded 180-second timeout, with prompt/search/token settings unchanged. See [the daily results](gemini4-daily/04-results-20261126.md) for scope history, costs, actual timestamps and storage verification.

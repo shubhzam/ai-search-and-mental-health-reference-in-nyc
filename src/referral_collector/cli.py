@@ -16,7 +16,10 @@ from pydantic import ValidationError
 from pydantic_settings import SettingsError
 from yaml import YAMLError
 
-from .batch import BATCH_ID, GEMINI4_MODELS, build_carbon_plan, build_gemini4_plan, build_plan, run_batch, validate_plan
+from .batch import (
+    BATCH_ID, GEMINI4_DAILY_MODELS, GEMINI4_MODELS, build_carbon_plan,
+    build_gemini4_daily_plan, build_gemini4_plan, build_plan, run_batch, validate_plan,
+)
 from .broker import check_broker, smoke_broker
 from .database import check_database
 from .live import recover
@@ -59,6 +62,7 @@ def main() -> int:
     batch_input.add_argument("--plan", type=Path)
     batch_input.add_argument("--carbon-pilot", action="store_true", help="Use the reviewed twelve-question Carbon pilot")
     batch_input.add_argument("--gemini4-model", choices=sorted(GEMINI4_MODELS), help="Use the reviewed 24-question Carbon comparison")
+    batch_input.add_argument("--gemini4-daily-model", choices=sorted(GEMINI4_DAILY_MODELS), help="Use the separate twelve-question daily Gemini cohort")
     batch.add_argument("--prompt-count", type=int, default=10)
     batch.add_argument("--prompt-id", action="append", default=[], help="Select explicit supplemental prompts")
     batch.add_argument("--gemini-output-tokens", type=int, choices=(2200, 8192), default=2200)
@@ -86,7 +90,8 @@ def main() -> int:
                     raise ValueError("Use --write-plan in preview mode")
                 if args.live and args.prompt_id:
                     raise ValueError("Save and review a supplemental plan first, then use --plan with --live")
-                plan = (build_gemini4_plan(args.gemini4_model) if args.gemini4_model else
+                plan = (build_gemini4_daily_plan(args.gemini4_daily_model) if args.gemini4_daily_model else
+                        build_gemini4_plan(args.gemini4_model) if args.gemini4_model else
                         build_carbon_plan() if args.carbon_pilot else
                         read_object(args.plan.read_bytes()) if args.plan
                         else build_plan(args.planned_date, args.prompt_count, args.prompt_id,

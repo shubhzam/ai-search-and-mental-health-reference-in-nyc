@@ -62,14 +62,14 @@ def request_options(provider: str, model_id: str, prompt: str) -> dict:
     }
 
 
-def request_search(provider: str, key: str, options: dict, capture: Callable[[bytes, int], None]) -> None:
+def request_search(provider: str, key: str, options: dict, capture: Callable[[bytes, int], None], *, timeout_ms: int = 90_000) -> None:
     """Pass the unparsed HTTP body to capture, including provider error bodies."""
     if provider == "gemini":
         def capture_response(response):
             capture(response.read(), response.status_code)
 
         http_options = types.HttpOptions(
-            timeout=90_000,
+            timeout=timeout_ms,
             retry_options=types.HttpRetryOptions(attempts=1),
             client_args={"event_hooks": {"response": [capture_response]}},
         )

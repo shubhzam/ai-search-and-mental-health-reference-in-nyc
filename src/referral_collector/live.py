@@ -167,7 +167,11 @@ def dispatch(url, data: Path, attempt: Attempt, key: str, *, eligible: bool = Tr
     transport_error = None
     started_at = now()
     try:
-        request_search(attempt.record["provider"], key, attempt.record["request"], capture)
+        timeout = attempt.record.get("transport_timeout_ms", 90_000)
+        if timeout != 90_000:
+            request_search(attempt.record["provider"], key, attempt.record["request"], capture, timeout_ms=timeout)
+        else:
+            request_search(attempt.record["provider"], key, attempt.record["request"], capture)
     except ResponseWriteError:
         raise
     except Exception as error:

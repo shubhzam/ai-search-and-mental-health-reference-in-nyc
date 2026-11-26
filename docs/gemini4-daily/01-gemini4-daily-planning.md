@@ -1,0 +1,13 @@
+# Gemini 4 daily collection · Planning
+
+Scope update: the user selected Neon, Hydrogen and Argon only, twelve new prompts each (36 requested responses). The four-model capability and initial proposal below are retained for recovery of two Carbon calls that started before the reply. No further Carbon requests are authorized for this run.
+
+A new-run request follows the completed four-model, 24-question comparison. Continue with twelve previously unused Gemini 4 questions on Carbon, Neon, Hydrogen and Argon. The user was offered this default; record the operational assumption separately from explicit model-selection replies. Questions retain existing verified Flash baselines and deterministic source ordering. This extends the paired Gemini set to 36 questions without changing the original study's 200-question target.
+
+The existing comparison validator fixes its original manifest and count at 24. Preserve that contract and all saved plan hashes. Add a separate reviewed daily cohort containing twelve fixed questions and the four exact model IDs; give it a separate builder and CLI selector. This is another bounded manual batch using existing execution and attempt tables, immutable raw capture and transactional settlement. No schema, dependency, scheduling or concurrency changes are needed.
+
+Identity is date/prompt/model, with retry keys grouped under the original execution. A successful execution must never be resent. One process owns the collection lock. Validate all baseline hashes and the shared request before dispatch. Retain the same live-search instruction, default thinking and 8,192-token limit. Eligibility is checked against the actual New York date, not the phrase “new day”: this request arrived at noon November 26, after the earlier overnight collection.
+
+Provider lookups returned HTTP 200 for all four models on November 26. Standard token rates remain the previously verified November 26 rates. Prior user authorization removes application dollar caps, but usage and uncertain charges remain recorded. One linked retry per incomplete response is allowed; retain partials. Unresolved transport/spend errors stop dispatch for reconciliation. Do not increase the output limit or silently change thinking settings.
+
+Definition of done: twelve new complete answers per selected model (Neon, Hydrogen and Argon) on the same set; matching local raw bytes, DB bodies, hashes and timestamps; duplicate-safe resume; preserved prior manifests; aggregate run summary. If credits or repeated failures prevent completion, retain all records and report the precise missing set. DB outage must prevent dispatch. Referral-quality evaluation and backup restoration are outside this run.

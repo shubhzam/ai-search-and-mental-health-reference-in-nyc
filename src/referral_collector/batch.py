@@ -34,6 +34,30 @@ ENTRY_FIELDS = {
 CARBON_REVIEW = Path("docs/gemini-carbon-pilot/review-manifest.json")
 GEMINI4_REVIEW = Path("docs/gemini4-comparison/review-manifest.json")
 GEMINI4_MODELS = {"gemini-4-neon", "gemini-4-hydrogen", "gemini-4-argon"}
+GEMINI4_DAILY_REVIEW = Path("docs/gemini4-daily/review-manifest.json")
+GEMINI4_DAILY_MODELS = GEMINI4_MODELS | {"gemini-4-carbon"}
+
+
+def build_gemini4_daily_plan(model_id: str) -> dict:
+    """Build a separate twelve-question daily cohort without changing prior plans."""
+    if model_id not in GEMINI4_DAILY_MODELS:
+        raise ValueError("Unsupported Gemini 4 daily model")
+    review = read_object(GEMINI4_DAILY_REVIEW.read_bytes())
+    today = datetime.now(ZoneInfo("America/New_York")).date()
+    plan = build_plan(today, 1, review["prompt_ids"], gemini_limit=8192)
+    entries = []
+    for entry in plan["executions"]:
+        if entry["provider"] != "gemini":
+            continue
+        entry.update(requested_model=model_id,
+                     execution_key=f"{today}__{entry['prompt_id']}__{model_id}",
+                     active_from=review["active_from"], active_until=review["active_until"])
+        entry["request"]["model"] = model_id
+        entries.append(entry)
+    plan.update(executions=entries, cohort="gemini4-daily",
+                comparison_manifest_sha256=digest(GEMINI4_DAILY_REVIEW.read_bytes()),
+                timing_deviation="Daily Gemini cohort uses recorded actual collection times")
+    return plan
 
 
 def build_gemini4_plan(model_id: str) -> dict:
@@ -137,17 +161,24 @@ def validate_plan(plan: dict) -> list[dict]:
     panel = PANEL
     carbon = plan.get("cohort") == "gemini-carbon-pilot"
     comparison = plan.get("cohort") == "gemini4-comparison"
-    if comparison:
-        manifest = read_object(GEMINI4_REVIEW.read_bytes())
+    daily = plan.get("cohort") == "gemini4-daily"
+    timeout_ms = plan.get("transport_timeout_ms", 90_000)
+    if type(timeout_ms) is not int or timeout_ms not in ((90_000, 180_000) if daily else (90_000,)):
+        raise ValueError("Unsupported transport timeout for this cohort")
+    if comparison or daily:
+        manifest_path = GEMINI4_DAILY_REVIEW if daily else GEMINI4_REVIEW
+        approved_models = GEMINI4_DAILY_MODELS if daily else GEMINI4_MODELS
+        expected_count = 12 if daily else 24
+        manifest = read_object(manifest_path.read_bytes())
         model_ids = {e["requested_model"] for e in executions}
         ordered = manifest["prompt_ids"]
         selected = [e["prompt_id"] for e in executions]
         expected = [p for p in ordered if p in selected] if plan.get("continuation") else ordered
-        if (plan.get("comparison_manifest_sha256") != digest(GEMINI4_REVIEW.read_bytes())
+        if (plan.get("comparison_manifest_sha256") != digest(manifest_path.read_bytes())
                 or manifest["source_prompt_sha256"] != digest(Path("prompts.csv").read_bytes())
-                or set(manifest["models"]) != GEMINI4_MODELS
-                or len(ordered) != 24 or len(set(ordered)) != 24
-                or len(model_ids) != 1 or not model_ids <= GEMINI4_MODELS
+                or set(manifest["models"]) != approved_models
+                or len(ordered) != expected_count or len(set(ordered)) != expected_count
+                or len(model_ids) != 1 or not model_ids <= approved_models
                 or selected != expected):
             raise ValueError("Gemini 4 comparison differs from its reviewed manifest")
         for baseline in manifest["baseline_responses"]:
@@ -198,7 +229,7 @@ def validate_plan(plan: dict) -> list[dict]:
             requested_limit = entry["request"]["config"]["max_output_tokens"]
             if requested_limit not in (2200, 8192):
                 raise ValueError("Unsupported Gemini token limit")
-            if (carbon or comparison) and requested_limit != 8192:
+            if (carbon or comparison or daily) and requested_limit != 8192:
                 raise ValueError("Gemini 4 comparison requires 8192 output tokens")
             options["config"]["max_output_tokens"] = requested_limit
         else:
@@ -238,6 +269,8 @@ def run_batch(plan: dict, batch_dir: Path, data: Path | None = None, keys=None, 
             location = f"data/live/collection/{batch_id}/{entry['execution_key']}"
             record = dict(entry, reserved_at=now(), status="reserved", reserved_usd=float(RESERVATION),
                           sdk_version=version(SDK_NAMES[provider]), plan_sha256=plan_hash)
+            if "transport_timeout_ms" in plan:
+                record["transport_timeout_ms"] = plan["transport_timeout_ms"]
             attempt = Attempt("collection", batch_id, f"{location}/attempt.json", record,
                               raw_path=f"{location}/response.json")
             today = datetime.now(ZoneInfo("America/New_York")).date().isoformat()

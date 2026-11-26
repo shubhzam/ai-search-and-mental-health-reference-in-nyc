@@ -1,0 +1,102 @@
+{
+  "models": [
+    "gemini-4-carbon",
+    "gemini-4-neon",
+    "gemini-4-hydrogen",
+    "gemini-4-argon"
+  ],
+  "prompt_ids": [
+    "g-193",
+    "g-224",
+    "g-243",
+    "g-367",
+    "g-385",
+    "g-238",
+    "g-136",
+    "g-318",
+    "g-097",
+    "g-129",
+    "g-207",
+    "g-091"
+  ],
+  "baseline_responses": [
+    {
+      "prompt_id": "g-193",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-193__gemini-3.8-flash/response.json",
+      "raw_sha256": "d27c1672193b91b6465a992be6c5656920c940a75c9521e55c46dca96880fd6a"
+    },
+    {
+      "prompt_id": "g-224",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-224__gemini-3.8-flash/response.json",
+      "raw_sha256": "4ddb90e944cb476ffd6e48c4d155845dafa7eef3da2f15b06db6a81ff5dfe230"
+    },
+    {
+      "prompt_id": "g-243",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-243__gemini-3.8-flash/response.json",
+      "raw_sha256": "e8ceafe368d0d3f1eea97117e1f4f35b5eb84f9a236ba5e8bd195af6e4323e84"
+    },
+    {
+      "prompt_id": "g-367",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-367__gemini-3.8-flash/response.json",
+      "raw_sha256": "a82bf6ccfe8d009fe809dc786b6fb9f538cef77c5c0e8823c7808b67cbb80610"
+    },
+    {
+      "prompt_id": "g-385",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-385__gemini-3.8-flash/response.json",
+      "raw_sha256": "cdb3535705e4e36afb0fffe37ad946f3926ada4f902a046813cbd32c53a7b880"
+    },
+    {
+      "prompt_id": "g-238",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-238__gemini-3.8-flash/response.json",
+      "raw_sha256": "ae1c27ea4a9d44fb8a75e6d351fe051e014916dd2f8dd5c72a268ffe72e2b39a"
+    },
+    {
+      "prompt_id": "g-136",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-136__gemini-3.8-flash/response.json",
+      "raw_sha256": "8b0964d09fbecfe7bdff192e107f9171fdb838abc399de5653bebcbf2cc63403"
+    },
+    {
+      "prompt_id": "g-318",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-318__gemini-3.8-flash/response.json",
+      "raw_sha256": "0e619d73d79d6e99c41e7c6da072fd76852f92a6f2d4294bbb537f1cde030c34"
+    },
+    {
+      "prompt_id": "g-097",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-097__gemini-3.8-flash/response.json",
+      "raw_sha256": "46e1a7d09680e78ab7de3c79e56c902a3ff105ee57a941d4eb76a28b7613a604"
+    },
+    {
+      "prompt_id": "g-129",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-129__gemini-3.8-flash/response.json",
+      "raw_sha256": "b87aa83f70dbe2c8fa4df8f383556e556577b7983e461f5b02479e319cdf8b8d"
+    },
+    {
+      "prompt_id": "g-207",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-207__gemini-3.8-flash/response.json",
+      "raw_sha256": "32dcf00e2624b18f80e095854415bcdd5da0e501f73b6f1d9322b84fac812e08"
+    },
+    {
+      "prompt_id": "g-091",
+      "requested_model": "gemini-3.8-flash",
+      "raw_path": "data/collection/day-20261113-early/2026-11-13__g-091__gemini-3.8-flash/response.json",
+      "raw_sha256": "dbf618ee2181d74d4199eabf04dd0649e3799ed2ce1cc5edf9ee11c50bb7c02b"
+    }
+  ],
+  "source_prompt_sha256": "1a765db8262fd05b31820558a550aa1bb6889896a0c63c3cf274633673cf814f",
+  "output_token_limit": 8192,
+  "active_from": "2026-11-26",
+  "active_until": "2026-11-30",
+  "selection": "Next deterministic Flash-baseline prompts never attempted by any Gemini 4 model",
+  "authorization": "New run requested; default twelve new prompts on all four current Gemini models stated after optional scope question"
+}

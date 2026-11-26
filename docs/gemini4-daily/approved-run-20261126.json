@@ -1,0 +1,12 @@
+{
+  "selected_models": [
+    "gemini-4-neon",
+    "gemini-4-hydrogen",
+    "gemini-4-argon"
+  ],
+  "prompt_count": 12,
+  "proposed_responses": 36,
+  "requested_at_date": "2026-11-26",
+  "authorization": "Only Neon, Hydrogen, and Argon\u201436 responses",
+  "scope_change": "Stop Carbon; preserve the two already-dispatched responses and do not retry or complete its remaining assignments"
+}
