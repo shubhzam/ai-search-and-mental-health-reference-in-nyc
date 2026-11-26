@@ -2,6 +2,7 @@
 import contextlib
 from copy import deepcopy
 from datetime import datetime
+from hashlib import sha256
 import io
 import json
 import os
@@ -29,6 +30,25 @@ def carbon_response(text='Four referral options with sources.'):
 
 
 class CarbonTests(unittest.TestCase):
+    def test_reviewed_continuation_subset(self):
+        plan = batch.build_carbon_plan()
+        plan["executions"] = plan["executions"][-6:]
+        review = json.loads(batch.CARBON_REVIEW.read_bytes())
+        review["prompt_ids"] = [e["prompt_id"] for e in plan["executions"]]
+        review["baseline_responses"] = [
+            row for row in review["baseline_responses"]
+            if row["prompt_id"] in review["prompt_ids"]
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "review.json"
+            path.write_text(json.dumps(review))
+            plan["pilot_manifest_sha256"] = sha256(path.read_bytes()).hexdigest()
+            with patch.object(batch, "CARBON_REVIEW", path):
+                self.assertEqual(len(batch.validate_plan(plan)), 6)
+                plan["executions"].pop()
+                with self.assertRaises(ValueError):
+                    batch.validate_plan(plan)
+
     def test_reviewed_plan_and_rejection_of_changes(self):
         plan = batch.build_carbon_plan()
         self.assertEqual(len(batch.validate_plan(plan)), 12)

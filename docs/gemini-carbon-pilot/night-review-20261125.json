@@ -1,0 +1,216 @@
+{
+  "model_id": "gemini-4-carbon",
+  "provider": "gemini",
+  "output_token_limit": 8192,
+  "prompt_ids": [
+    "g-044",
+    "g-462",
+    "g-299",
+    "g-214",
+    "g-055",
+    "g-353"
+  ],
+  "source_prompt_sha256": "1a765db8262fd05b31820558a550aa1bb6889896a0c63c3cf274633673cf814f",
+  "baseline_responses": [
+    {
+      "prompt_id": "g-044",
+      "provider": "anthropic",
+      "requested_model": "claude-sonnet-4-5-20250929",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-044__claude-sonnet-4-5-20250929/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-044__claude-sonnet-4-5-20250929/response.json",
+      "raw_sha256": "bf47709b8bfb7fbad3a74ac92a6ff2344fac3c61bf8f4bc3224b77aaa959d89b",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:20:53.550917+00:00",
+      "finished_at": "2026-11-12T17:21:10.185135+00:00"
+    },
+    {
+      "prompt_id": "g-044",
+      "provider": "gemini",
+      "requested_model": "gemini-3.8-flash",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-044__gemini-3.8-flash/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-044__gemini-3.8-flash/response.json",
+      "raw_sha256": "a31f7ab9a1f7c94fb59546961e1343fe0845faa047a8bbe482fe58e61cc29101",
+      "output_token_limit": 8192,
+      "started_at": "2026-11-12T17:21:15.552484+00:00",
+      "finished_at": "2026-11-12T17:21:39.130898+00:00"
+    },
+    {
+      "prompt_id": "g-044",
+      "provider": "openai",
+      "requested_model": "gpt-4o-2024-08-06",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-044__gpt-4o-2024-08-06/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-044__gpt-4o-2024-08-06/response.json",
+      "raw_sha256": "1cbafc302932a65bc68e09bf7e0337d4b0966f186ce1b1f020ad0ad23a0dd897",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:21:10.217923+00:00",
+      "finished_at": "2026-11-12T17:21:15.537861+00:00"
+    },
+    {
+      "prompt_id": "g-462",
+      "provider": "anthropic",
+      "requested_model": "claude-sonnet-4-5-20250929",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-462__claude-sonnet-4-5-20250929/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-462__claude-sonnet-4-5-20250929/response.json",
+      "raw_sha256": "3702905baef719a7ebc710e82f29c488fdd7e9376a4979ee7b6cd963e13b68a9",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:21:39.162430+00:00",
+      "finished_at": "2026-11-12T17:21:53.703008+00:00"
+    },
+    {
+      "prompt_id": "g-462",
+      "provider": "gemini",
+      "requested_model": "gemini-3.8-flash",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-462__gemini-3.8-flash/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-462__gemini-3.8-flash/response.json",
+      "raw_sha256": "716aedd103213c69d194e80427b835f61777a44bc7758585b707c3352d6b05d7",
+      "output_token_limit": 8192,
+      "started_at": "2026-11-12T17:22:00.017040+00:00",
+      "finished_at": "2026-11-12T17:22:23.831354+00:00"
+    },
+    {
+      "prompt_id": "g-462",
+      "provider": "openai",
+      "requested_model": "gpt-4o-2024-08-06",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-462__gpt-4o-2024-08-06/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-462__gpt-4o-2024-08-06/response.json",
+      "raw_sha256": "275c8c08d4f85001821a221fcd53e94d69baada7750fbd17ec49bf0f5c4693e9",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:21:53.736196+00:00",
+      "finished_at": "2026-11-12T17:21:59.988032+00:00"
+    },
+    {
+      "prompt_id": "g-299",
+      "provider": "anthropic",
+      "requested_model": "claude-sonnet-4-5-20250929",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-299__claude-sonnet-4-5-20250929/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-299__claude-sonnet-4-5-20250929/response.json",
+      "raw_sha256": "719b5b365e79855a7f057842fa7bb9f6f656d1c7bb0eb6cb3e665da44ca2281f",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:22:23.867500+00:00",
+      "finished_at": "2026-11-12T17:22:35.959531+00:00"
+    },
+    {
+      "prompt_id": "g-299",
+      "provider": "gemini",
+      "requested_model": "gemini-3.8-flash",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-299__gemini-3.8-flash/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-299__gemini-3.8-flash/response.json",
+      "raw_sha256": "1fec5ab643d2c680668c6837033deca848a5e286c30c67db284a15e8a11955eb",
+      "output_token_limit": 8192,
+      "started_at": "2026-11-12T17:22:41.747222+00:00",
+      "finished_at": "2026-11-12T17:23:07.653093+00:00"
+    },
+    {
+      "prompt_id": "g-299",
+      "provider": "openai",
+      "requested_model": "gpt-4o-2024-08-06",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-299__gpt-4o-2024-08-06/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-299__gpt-4o-2024-08-06/response.json",
+      "raw_sha256": "2424d8b64c607ccb979c1e79fc28e0b4d9d9c5ef67abb703b67ac491094597a8",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:22:35.990753+00:00",
+      "finished_at": "2026-11-12T17:22:41.717171+00:00"
+    },
+    {
+      "prompt_id": "g-214",
+      "provider": "anthropic",
+      "requested_model": "claude-sonnet-4-5-20250929",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-214__claude-sonnet-4-5-20250929/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-214__claude-sonnet-4-5-20250929/response.json",
+      "raw_sha256": "51d17caca0b53a3d53c532e0eaab954fd3b828fb9ee9598507dae180732df5e6",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:23:07.700321+00:00",
+      "finished_at": "2026-11-12T17:23:18.861334+00:00"
+    },
+    {
+      "prompt_id": "g-214",
+      "provider": "gemini",
+      "requested_model": "gemini-3.8-flash",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-214__gemini-3.8-flash/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-214__gemini-3.8-flash/response.json",
+      "raw_sha256": "7bbf3664496f95ec56602baea51aa479cf8225e2686caa9843f3577a4a7d6253",
+      "output_token_limit": 8192,
+      "started_at": "2026-11-12T17:23:23.884917+00:00",
+      "finished_at": "2026-11-12T17:23:49.571504+00:00"
+    },
+    {
+      "prompt_id": "g-214",
+      "provider": "openai",
+      "requested_model": "gpt-4o-2024-08-06",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-214__gpt-4o-2024-08-06/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-214__gpt-4o-2024-08-06/response.json",
+      "raw_sha256": "dbfb9a43cac777ad376986c27700ca45afe16e2cf10e67862392fc89c0d8d64f",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:23:18.891571+00:00",
+      "finished_at": "2026-11-12T17:23:23.873302+00:00"
+    },
+    {
+      "prompt_id": "g-055",
+      "provider": "anthropic",
+      "requested_model": "claude-sonnet-4-5-20250929",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-055__claude-sonnet-4-5-20250929/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-055__claude-sonnet-4-5-20250929/response.json",
+      "raw_sha256": "589f9e679955312cc7ba7d71e2423f3308447c44040d8368ac354d55eee20f04",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:23:49.606323+00:00",
+      "finished_at": "2026-11-12T17:24:05.785787+00:00"
+    },
+    {
+      "prompt_id": "g-055",
+      "provider": "gemini",
+      "requested_model": "gemini-3.8-flash",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-055__gemini-3.8-flash/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-055__gemini-3.8-flash/response.json",
+      "raw_sha256": "e68e81a73b5140a987948dd5e79ac3aa3350bea034ea928ddb9818852510004d",
+      "output_token_limit": 8192,
+      "started_at": "2026-11-12T17:24:11.227240+00:00",
+      "finished_at": "2026-11-12T17:24:44.840333+00:00"
+    },
+    {
+      "prompt_id": "g-055",
+      "provider": "openai",
+      "requested_model": "gpt-4o-2024-08-06",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-055__gpt-4o-2024-08-06/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-055__gpt-4o-2024-08-06/response.json",
+      "raw_sha256": "87c74b04c87807fdd2f96b23ea64782caecd103bc2d2423332297f94bba70227",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:24:05.823905+00:00",
+      "finished_at": "2026-11-12T17:24:11.205649+00:00"
+    },
+    {
+      "prompt_id": "g-353",
+      "provider": "anthropic",
+      "requested_model": "claude-sonnet-4-5-20250929",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-353__claude-sonnet-4-5-20250929/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-353__claude-sonnet-4-5-20250929/response.json",
+      "raw_sha256": "e50fed3c85675735940de8c1cc1ed2ee31ed01016fb4efb2b4e43a273b36c2b0",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:24:44.886419+00:00",
+      "finished_at": "2026-11-12T17:24:59.438160+00:00"
+    },
+    {
+      "prompt_id": "g-353",
+      "provider": "gemini",
+      "requested_model": "gemini-3.8-flash",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-353__gemini-3.8-flash/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-353__gemini-3.8-flash/response.json",
+      "raw_sha256": "d21175714e9be6cecd0aef5042a817e5bff04bb3fb4747787763ed91527ef8be",
+      "output_token_limit": 8192,
+      "started_at": "2026-11-12T17:25:05.878499+00:00",
+      "finished_at": "2026-11-12T17:25:26.719109+00:00"
+    },
+    {
+      "prompt_id": "g-353",
+      "provider": "openai",
+      "requested_model": "gpt-4o-2024-08-06",
+      "source_path": "data/collection/day-20261112/2026-11-12__g-353__gpt-4o-2024-08-06/attempt.json",
+      "raw_path": "data/collection/day-20261112/2026-11-12__g-353__gpt-4o-2024-08-06/response.json",
+      "raw_sha256": "d6af8719bb7170bdc381d860e847208967f8f39aa8eccebc7d1cfd3e9ad77426",
+      "output_token_limit": 2200,
+      "started_at": "2026-11-12T17:24:59.476218+00:00",
+      "finished_at": "2026-11-12T17:25:05.857968+00:00"
+    }
+  ],
+  "selection": "Next twelve fully matched Flash-baseline prompts not yet attempted on Carbon",
+  "authorized_run": "November 25 night continuation of stopped Carbon comparison"
+}

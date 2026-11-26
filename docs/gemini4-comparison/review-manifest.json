@@ -1,0 +1,209 @@
+{
+  "models": [
+    "gemini-4-neon",
+    "gemini-4-hydrogen",
+    "gemini-4-argon"
+  ],
+  "prompt_ids": [
+    "g-403",
+    "g-180",
+    "g-290",
+    "g-114",
+    "g-253",
+    "g-225",
+    "g-423",
+    "g-125",
+    "g-144",
+    "g-358",
+    "g-018",
+    "g-317",
+    "g-215",
+    "g-368",
+    "g-448",
+    "g-034",
+    "g-348",
+    "g-142",
+    "g-044",
+    "g-462",
+    "g-299",
+    "g-214",
+    "g-055",
+    "g-353"
+  ],
+  "baseline_model": "gemini-4-carbon",
+  "output_token_limit": 8192,
+  "active_from": "2026-11-26",
+  "active_until": "2026-11-30",
+  "source_prompt_sha256": "1a765db8262fd05b31820558a550aa1bb6889896a0c63c3cf274633673cf814f",
+  "baseline_responses": [
+    {
+      "prompt_id": "g-403",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-403__gemini-4-carbon/response.json",
+      "raw_sha256": "028699ef51a8ccb406a52f0fea64a44790b45d8354357268d0ee23df5910e8a5",
+      "started_at": "2026-11-25T16:52:43.804740+00:00",
+      "finished_at": "2026-11-25T16:53:06.546869+00:00"
+    },
+    {
+      "prompt_id": "g-180",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-180__gemini-4-carbon/response.json",
+      "raw_sha256": "826296892acf8d1568199b39efd11b4f5c6ddd34398bb542af59e7cb60a2345c",
+      "started_at": "2026-11-25T16:53:06.620965+00:00",
+      "finished_at": "2026-11-25T16:54:19.095338+00:00"
+    },
+    {
+      "prompt_id": "g-290",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-290__gemini-4-carbon/response.json",
+      "raw_sha256": "b26213f0b7c4cb185f482e574fd1fcee6281524c00e09a8666e0d853ca911974",
+      "started_at": "2026-11-25T16:54:19.181051+00:00",
+      "finished_at": "2026-11-25T16:54:36.567250+00:00"
+    },
+    {
+      "prompt_id": "g-114",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-114__gemini-4-carbon/response.json",
+      "raw_sha256": "ba322ee3624391e44cf4c6d595adc287e90e0ce06d757eb64a6ef74b7ad08162",
+      "started_at": "2026-11-25T16:54:36.634599+00:00",
+      "finished_at": "2026-11-25T16:54:49.803766+00:00"
+    },
+    {
+      "prompt_id": "g-253",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-253__gemini-4-carbon/response.json",
+      "raw_sha256": "762d204513a8e798623c111560d4cececf1ba36e8d340bfcca2ed6959f280a75",
+      "started_at": "2026-11-25T16:54:49.872486+00:00",
+      "finished_at": "2026-11-25T16:55:52.846196+00:00"
+    },
+    {
+      "prompt_id": "g-225",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-225__gemini-4-carbon/response.json",
+      "raw_sha256": "bb22631be46b0541554304c7131c5f6bdaa5e15bd5750e1a6140940479e34953",
+      "started_at": "2026-11-25T16:55:52.931009+00:00",
+      "finished_at": "2026-11-25T16:56:36.094396+00:00"
+    },
+    {
+      "prompt_id": "g-423",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-423__gemini-4-carbon/response.json",
+      "raw_sha256": "c11d608812844d13b8b2b75ff54d47dc49f596eebb04678195e267aca75fc509",
+      "started_at": "2026-11-25T16:56:36.179251+00:00",
+      "finished_at": "2026-11-25T16:58:00.124082+00:00"
+    },
+    {
+      "prompt_id": "g-125",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-125__gemini-4-carbon/response.json",
+      "raw_sha256": "1f1af73ca87cf949f977fbc23d6f5e96ddf5dcbee5b74b46cbf5f676825985bf",
+      "started_at": "2026-11-25T16:58:00.195859+00:00",
+      "finished_at": "2026-11-25T16:58:56.345033+00:00"
+    },
+    {
+      "prompt_id": "g-144",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-144__gemini-4-carbon/response.json",
+      "raw_sha256": "c19e3fa5995df95a57af0dfd7275ce8dec9f6a796631c96a730036c51f67ef2e",
+      "started_at": "2026-11-25T16:58:56.399593+00:00",
+      "finished_at": "2026-11-25T16:59:39.075450+00:00"
+    },
+    {
+      "prompt_id": "g-358",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-358__gemini-4-carbon/response.json",
+      "raw_sha256": "5a80486bb04b7a690e40c2426e208eb9e86cb9f21febb9243b017efcb0a39ffc",
+      "started_at": "2026-11-25T16:59:39.163099+00:00",
+      "finished_at": "2026-11-25T17:00:00.590813+00:00"
+    },
+    {
+      "prompt_id": "g-018",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-018__gemini-4-carbon/response.json",
+      "raw_sha256": "afcc3a6ef8c895b354cdcd3b3800368478cd24df81d42ff35428eb8db656f282",
+      "started_at": "2026-11-25T17:00:00.664560+00:00",
+      "finished_at": "2026-11-25T17:00:12.117101+00:00"
+    },
+    {
+      "prompt_id": "g-317",
+      "raw_path": "data/live/collection/gemini-carbon-pilot-20261125/2026-11-25__g-317__gemini-4-carbon/response.json",
+      "raw_sha256": "f2204911432bceaca31819cb3288f04d70883120fa97b3ac9d3ea7488aeed8fe",
+      "started_at": "2026-11-25T17:00:12.194420+00:00",
+      "finished_at": "2026-11-25T17:00:25.083374+00:00"
+    },
+    {
+      "prompt_id": "g-215",
+      "raw_path": "data/live/collection/carbon-afternoon-20261125/2026-11-25__g-215__gemini-4-carbon/response.json",
+      "raw_sha256": "2bffae1dd07766074e4e18e5940f9b57e86b6c4c513ec1e5230a262b1c0d5086",
+      "started_at": "2026-11-25T20:31:13.533553+00:00",
+      "finished_at": "2026-11-25T20:32:10.048465+00:00"
+    },
+    {
+      "prompt_id": "g-368",
+      "raw_path": "data/live/collection/carbon-afternoon-20261125/2026-11-25__g-368__gemini-4-carbon/response.json",
+      "raw_sha256": "519a458d2f1edba0395202531cff37e4d7e23c5185e5839715343494c3321a8b",
+      "started_at": "2026-11-25T20:32:10.151090+00:00",
+      "finished_at": "2026-11-25T20:32:27.028204+00:00"
+    },
+    {
+      "prompt_id": "g-448",
+      "raw_path": "data/live/collection/carbon-afternoon-20261125/2026-11-25__g-448__gemini-4-carbon/response.json",
+      "raw_sha256": "3a2469964dede3773ee94812be65393695ba2d1aefa4e4d3b10b4abde4025322",
+      "started_at": "2026-11-25T20:32:27.106828+00:00",
+      "finished_at": "2026-11-25T20:32:59.519608+00:00"
+    },
+    {
+      "prompt_id": "g-034",
+      "raw_path": "data/live/collection/carbon-afternoon-20261125/2026-11-25__g-034__gemini-4-carbon/response.json",
+      "raw_sha256": "d2d8c0577879c4279bf0c2a5f145ec187b81da974d1676dfb61385cd1785b47c",
+      "started_at": "2026-11-25T20:32:59.571973+00:00",
+      "finished_at": "2026-11-25T20:33:23.622025+00:00"
+    },
+    {
+      "prompt_id": "g-348",
+      "raw_path": "data/live/collection/carbon-afternoon-20261125/2026-11-25__g-348__gemini-4-carbon/response.json",
+      "raw_sha256": "0d48374f1e43db5ed6ef73d1bac12110046e1c341246ee04f9368405e344e67d",
+      "started_at": "2026-11-25T20:33:23.666866+00:00",
+      "finished_at": "2026-11-25T20:34:10.063648+00:00"
+    },
+    {
+      "prompt_id": "g-142",
+      "raw_path": "data/live/collection/carbon-afternoon-20261125/2026-11-25__g-142__gemini-4-carbon/response.json",
+      "raw_sha256": "2e3083cb7298ef3fa8523b52468097554dc74afa05d46993caa0a7c3a4dc83c2",
+      "started_at": "2026-11-25T20:34:10.139090+00:00",
+      "finished_at": "2026-11-25T20:34:27.360336+00:00"
+    },
+    {
+      "prompt_id": "g-044",
+      "raw_path": "data/live/collection/carbon-night-20261125/2026-11-25__g-044__gemini-4-carbon__retry-1/response.json",
+      "raw_sha256": "6b61225ae6d44d78bee6708c8568929fa4fc79108f153c163591192ed31982d1",
+      "started_at": "2026-11-26T04:19:20.019706+00:00",
+      "finished_at": "2026-11-26T04:19:45.364992+00:00"
+    },
+    {
+      "prompt_id": "g-462",
+      "raw_path": "data/live/collection/carbon-night-20261125/2026-11-25__g-462__gemini-4-carbon/response.json",
+      "raw_sha256": "c9f0f212ece4ce613bc29abc090dddc4ba6ad6a34df8d3e0b5d1b2df4e76df21",
+      "started_at": "2026-11-26T04:19:45.452571+00:00",
+      "finished_at": "2026-11-26T04:20:15.898761+00:00"
+    },
+    {
+      "prompt_id": "g-299",
+      "raw_path": "data/live/collection/carbon-night-20261125/2026-11-25__g-299__gemini-4-carbon/response.json",
+      "raw_sha256": "7bb11d9abc1c0c7d0427e80ee1d957c21a9b648df5f0f0a133225dd0c98fa425",
+      "started_at": "2026-11-26T04:20:15.950666+00:00",
+      "finished_at": "2026-11-26T04:21:27.367598+00:00"
+    },
+    {
+      "prompt_id": "g-214",
+      "raw_path": "data/live/collection/carbon-night-20261125/2026-11-25__g-214__gemini-4-carbon/response.json",
+      "raw_sha256": "fbb1d5cdaf4c01039cfab50591fb2ad901eb8fa18cacc904e106e4e6b64fad1d",
+      "started_at": "2026-11-26T04:21:27.426972+00:00",
+      "finished_at": "2026-11-26T04:22:02.254073+00:00"
+    },
+    {
+      "prompt_id": "g-055",
+      "raw_path": "data/live/collection/carbon-night-20261125/2026-11-25__g-055__gemini-4-carbon/response.json",
+      "raw_sha256": "6611dd604b3291d9c3c8934474d3bacc483c523cd07dc35cd6d3ab1fcf31bc47",
+      "started_at": "2026-11-26T04:22:02.314412+00:00",
+      "finished_at": "2026-11-26T04:23:05.519770+00:00"
+    },
+    {
+      "prompt_id": "g-353",
+      "raw_path": "data/live/collection/carbon-night-20261125/2026-11-25__g-353__gemini-4-carbon/response.json",
+      "raw_sha256": "edd55eaf5ffdce3b4cd768142559e03fefbefc7cf7453db44ba535435cb1db7b",
+      "started_at": "2026-11-26T04:23:05.579069+00:00",
+      "finished_at": "2026-11-26T04:23:28.296677+00:00"
+    }
+  ],
+  "authorized": "User explicitly requested matching each new model to Carbon count and pushing results tonight"
+}

@@ -88,16 +88,19 @@ The November 17 morning run saved 24 complete Gemini and OpenAI responses. Claud
 
 ## Verified inventory and storage
 
-The November 25 PostgreSQL/raw-file audit verified 589 raw response files against stored checksums and parsed database response JSON. The database contains 572 collection attempts and 17 pilot attempts, including 568 complete collection responses. Pilot responses are counted separately. PostgreSQL uses the persistent project_postgres-data Docker volume. Migration 002 and the historical import have been applied locally, and live collection persists directly to PostgreSQL and data/live/.
+The November 26 PostgreSQL/raw-file audit verified all 676 raw response files against stored checksums and parsed database response JSON. The database contains 659 collection attempts and 17 pilot attempts, including 652 complete collection responses. Pilot responses are counted separately. PostgreSQL uses the persistent project_postgres-data Docker volume. Migration 002 and the historical import have been applied locally, and live collection persists directly to PostgreSQL and data/live/.
 
 | Model | Complete collection responses |
 |---|---:|
 | Gemini 3.8 Flash | 200 |
 | Claude Sonnet 4.5 | 188 |
 | GPT-4o | 168 |
-| Gemini 4 Carbon pilot | 12 |
+| Gemini 4 Carbon | 24 |
+| Gemini 4 Neon | 24 |
+| Gemini 4 Hydrogen | 24 |
+| Gemini 4 Argon | 24 |
 
-The original three-model panel has 168 fully matched prompts out of the 200-prompt target. Twelve Claude and 32 OpenAI responses are still needed. Provider credit rejections interrupted their collection. The twelve Carbon responses are additional answers to existing questions and retain their own model identity.
+The original panel has 168 fully matched prompts out of the 200-prompt target. Twelve Claude and 32 OpenAI responses remain missing. Carbon, Neon, Hydrogen and Argon each answered the same 24 existing questions; these additional model responses do not fill the original-model gaps.
 
 ## November 19–20 collection
 
@@ -126,3 +129,9 @@ The user explicitly removed the application spend limits on November 22 and dire
 Our ledger counts gross search charges before free allowances and includes provisional historical costs. It must not be interpreted as a billing balance. The November 24 Google AI Studio screenshot showed $1.61 in monthly project spend, while the ledger estimated $13.31. The difference was primarily $11.17 in estimated search charges plus a $0.50 provision. The Carbon pilot added about $0.21 in estimated token charges, or $1.11 gross before its search allowance. Actual charges require provider billing reconciliation.
 
 Raw responses, usage records and credentials remain in ignored local storage. Only code, reviewed manifests, tests and summary documentation are published.
+
+## November 25–26 Gemini comparison expansion
+
+Carbon's afternoon and night continuation increased its completed set from 12 to 24. One saved deadline error was retained with a provisional charge and followed by a successful linked retry. The user then explicitly authorized Neon, Hydrogen and Argon to match Carbon's count tonight. Each completed all 24 prompts November 26. Hydrogen retained two partial MAX_TOKENS attempts and completed each on its single linked retry.
+
+The expansion added 72 successful responses across 74 attempts, with estimated token charges of $3.638274 including partials. All new files and database records passed validation, and reopening the saved plans made zero provider calls. See [the paired Gemini 4 results](gemini4-comparison/04-results.md) for model counts, costs, actual timing and limitations.

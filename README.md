@@ -114,7 +114,7 @@ Pilot and batch commands reserve spend in PostgreSQL before every provider reque
 | `data/collection/` and `data/pilot/` | Historical raw bytes and ledgers, with collection plans |
 | `data/live/` | New raw bytes, capture receipts and batch plans |
 
-The database contains 572 collection attempts and 17 pilot attempts as of November 25. The original panel covers 200 distinct prompts, with 168 fully matched across all three models. A separate Carbon pilot adds 12 complete responses on existing prompts. See [the collection summary](docs/collection-results.md) and [Carbon results](docs/gemini-carbon-pilot/04-results.md) for details.
+As of November 26, PostgreSQL holds **652 complete collection responses** across 200 distinct prompts, with 659 collection attempts and 17 pilot attempts. The original panel has 168 fully matched prompts. Carbon, Neon, Hydrogen and Argon each have 24 complete responses on the same comparison prompts. All 676 raw files passed the database/checksum audit. See [the collection summary](docs/collection-results.md), [Carbon results](docs/gemini-carbon-pilot/04-results.md) and [Gemini 4 comparison results](docs/gemini4-comparison/04-results.md).
 
 ### Start services and import history
 

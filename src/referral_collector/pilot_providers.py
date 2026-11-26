@@ -27,6 +27,9 @@ RATES = {
     "gemini-3.8-flash": (0.75, 3.75),
     # Introductory standard pricing through November 30, 2026 only.
     "gemini-4-carbon": (2, 10),
+    "gemini-4-neon": (3, 15),
+    "gemini-4-hydrogen": (1.5, 7.5),
+    "gemini-4-argon": (2, 10),
 }
 
 
@@ -147,7 +150,7 @@ def observe(provider: str, model_id: str, response: dict) -> Observation:
         billed_input = usage["promptTokenCount"] + usage.get("toolUsePromptTokenCount", 0)
         billed_output = usage.get("candidatesTokenCount", 0) + usage.get("thoughtsTokenCount", 0)
         complete = candidate.get("finishReason") == "STOP"
-        if model_id == "gemini-4-carbon":
+        if model_id.startswith("gemini-4-"):
             visible = any(
                 part.get("text", "").strip() and not part.get("thought")
                 for part in (candidate.get("content") or {}).get("parts", [])

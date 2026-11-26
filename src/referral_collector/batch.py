@@ -32,6 +32,32 @@ ENTRY_FIELDS = {
 }
 
 CARBON_REVIEW = Path("docs/gemini-carbon-pilot/review-manifest.json")
+GEMINI4_REVIEW = Path("docs/gemini4-comparison/review-manifest.json")
+GEMINI4_MODELS = {"gemini-4-neon", "gemini-4-hydrogen", "gemini-4-argon"}
+
+
+def build_gemini4_plan(model_id: str) -> dict:
+    """Match one approved model to the fixed 24-question Carbon baseline."""
+    if model_id not in GEMINI4_MODELS:
+        raise ValueError("Unsupported Gemini 4 comparison model")
+    review = read_object(GEMINI4_REVIEW.read_bytes())
+    prompt_ids = review["prompt_ids"]
+    first = build_plan(date(2026, 11, 10), 1, prompt_ids[:12], gemini_limit=8192)
+    second = build_plan(date(2026, 11, 10), 1, prompt_ids[12:], gemini_limit=8192)
+    today = datetime.now(ZoneInfo("America/New_York")).date().isoformat()
+    entries = []
+    for entry in first["executions"] + second["executions"]:
+        if entry["provider"] != "gemini":
+            continue
+        entry.update(requested_model=model_id, planned_date=today,
+                     execution_key=f"{today}__{entry['prompt_id']}__{model_id}",
+                     active_from=review["active_from"], active_until=review["active_until"])
+        entry["request"]["model"] = model_id
+        entries.append(entry)
+    first.update(executions=entries, cohort="gemini4-comparison",
+                 comparison_manifest_sha256=digest(GEMINI4_REVIEW.read_bytes()),
+                 timing_deviation="Additional model collected later than Carbon baseline")
+    return first
 
 
 def build_carbon_plan() -> dict:
@@ -110,11 +136,33 @@ def validate_plan(plan: dict) -> list[dict]:
     model_dates = {m.model_id: (str(m.active_from), str(m.active_until)) for m in models}
     panel = PANEL
     carbon = plan.get("cohort") == "gemini-carbon-pilot"
+    comparison = plan.get("cohort") == "gemini4-comparison"
+    if comparison:
+        manifest = read_object(GEMINI4_REVIEW.read_bytes())
+        model_ids = {e["requested_model"] for e in executions}
+        ordered = manifest["prompt_ids"]
+        selected = [e["prompt_id"] for e in executions]
+        expected = [p for p in ordered if p in selected] if plan.get("continuation") else ordered
+        if (plan.get("comparison_manifest_sha256") != digest(GEMINI4_REVIEW.read_bytes())
+                or manifest["source_prompt_sha256"] != digest(Path("prompts.csv").read_bytes())
+                or set(manifest["models"]) != GEMINI4_MODELS
+                or len(ordered) != 24 or len(set(ordered)) != 24
+                or len(model_ids) != 1 or not model_ids <= GEMINI4_MODELS
+                or selected != expected):
+            raise ValueError("Gemini 4 comparison differs from its reviewed manifest")
+        for baseline in manifest["baseline_responses"]:
+            if digest(Path(baseline["raw_path"]).read_bytes()) != baseline["raw_sha256"]:
+                raise ValueError("Gemini 4 baseline checksum mismatch")
+        model_id = next(iter(model_ids))
+        panel = {"gemini": model_id}
+        model_dates = {model_id: (manifest["active_from"], manifest["active_until"])}
     if carbon:
         manifest = read_object(CARBON_REVIEW.read_bytes())
         if (plan.get("pilot_manifest_sha256") != digest(CARBON_REVIEW.read_bytes())
                 or manifest["source_prompt_sha256"] != digest(Path("prompts.csv").read_bytes())
-                or len(executions) != 12
+                or not 1 <= len(manifest["prompt_ids"]) <= 12
+                or len(set(manifest["prompt_ids"])) != len(manifest["prompt_ids"])
+                or len(executions) != len(manifest["prompt_ids"])
                 or [e["prompt_id"] for e in executions] != manifest["prompt_ids"]):
             raise ValueError("Carbon pilot differs from its reviewed manifest")
         for baseline in manifest["baseline_responses"]:
@@ -150,8 +198,8 @@ def validate_plan(plan: dict) -> list[dict]:
             requested_limit = entry["request"]["config"]["max_output_tokens"]
             if requested_limit not in (2200, 8192):
                 raise ValueError("Unsupported Gemini token limit")
-            if carbon and requested_limit != 8192:
-                raise ValueError("Carbon pilot requires 8192 output tokens")
+            if (carbon or comparison) and requested_limit != 8192:
+                raise ValueError("Gemini 4 comparison requires 8192 output tokens")
             options["config"]["max_output_tokens"] = requested_limit
         else:
             options["max_tokens" if provider == "anthropic" else "max_output_tokens"] = 2200

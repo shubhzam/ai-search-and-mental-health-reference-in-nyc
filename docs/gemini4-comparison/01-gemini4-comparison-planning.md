@@ -1,0 +1,13 @@
+# Gemini 4 comparison · Planning
+
+The user explicitly authorized collecting Neon, Hydrogen and Argon tonight at Carbon's existing count and pushing the results. Carbon has 24 successful answers on 24 distinct prompts. This expansion sends those exact questions to each additional model, producing up to 72 new successful answers. Keep separate model IDs, exact request settings and actual collection dates for paired analysis. The later search dates and different default thinking behavior remain comparison variables.
+
+Read the fixed review manifest and verify the source prompt hash and all 24 Carbon raw checksums before dispatch. Use the same concise instruction, Google Search tool, 8,192-token limit and default thinking settings. All three model lookups returned HTTP 200 with generateContent support on November 26. Confirm actual search execution and completion with the first generated response for each model.
+
+This uses the existing sequential reservation/capture/settlement workflow. Model-specific execution keys prevent duplication across models. One process owns the existing collection lock. No additional concurrency or schema is needed. Existing execution/attempt primary keys support identity and recovery. Snapshot all 24 paired baseline references in docs/gemini4-comparison/review-manifest.json.
+
+Extend the batch validator with a dedicated comparison cohort whose models, prompt order and file hashes come from this fixed manifest. Preserve the original panel and Carbon pilot validation. Add pricing for the three exact IDs. Completed outcomes require visible answer text, matching returned model identity, completion, search evidence, usable usage, immutable host raw bytes and a committed PostgreSQL record.
+
+At maximum output usage, 24 requests per model cost about $2.95 Neon, $1.47 Hydrogen and $1.97 Argon in output tokens, plus input charges. Actual usage may be lower, and account credits may prevent finishing all requests. The user previously removed application dollar limits. Preserve spend records and stop or reconcile failures before continuing. A saved explicit error may receive one separately recorded retry at most after retaining the original reservation as provisional spend; never silently release uncertain charges or retry successful executions.
+
+Definition of done is 24 successful responses per model on the exact Carbon set, verified raw hashes and DB bodies, zero duplicate completed prompt/model pairs, tests of plan tampering and duplicate resume, and a published summary with per-model counts, costs and limitations. If a provider error or credit issue prevents completion, preserve attempts and list exact remaining requests. Backup/restore and referral-quality evaluation are outside this collection step.

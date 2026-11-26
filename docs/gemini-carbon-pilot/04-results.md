@@ -11,3 +11,7 @@ The dataset now includes 200 successful Flash responses, 188 Claude responses, 1
 The twelve questions were chosen deterministically from existing matched prompts with an 8,192-token Flash baseline. Live-search dates differ, and no referral-accuracy or quality advantage has yet been established. That requires response/citation analysis.
 
 Twenty-two offline and fake-provider/database tests passed. No dependencies or schema migration were required. The original panel manifest remains available, while Carbon uses a dedicated reviewed cohort. The user's prior instruction to disable application spend limits applied to this finite pilot, which stopped at twelve requests.
+
+## November 25 continuation
+
+The approved afternoon and night continuations added twelve more completed answers, bringing Carbon to 24 distinct comparison prompts. A saved deadline error was retained with its original $0.50 reservation recorded as provisional spend; a separately linked retry succeeded. The afternoon and night review manifests preserve the exact subsets. All 24 Carbon raw responses passed the November 26 PostgreSQL/checksum audit. This 24-question set became the baseline for the [Neon, Hydrogen and Argon comparison](../gemini4-comparison/04-results.md). Earlier counts and costs above describe the initial twelve-question pilot only.
