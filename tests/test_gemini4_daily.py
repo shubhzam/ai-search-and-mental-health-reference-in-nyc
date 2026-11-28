@@ -18,6 +18,26 @@ from test_gemini4_comparison import carbon_response
 
 
 class DailyTests(unittest.TestCase):
+    def test_dated_review_excludes_carbon_and_preserves_old_plans(self):
+        review = Path('docs/gemini4-daily/review-20261128.json')
+        previous = batch.build_gemini4_daily_plan('gemini-4-neon')
+        plan = batch.build_gemini4_daily_plan('gemini-4-neon', review)
+        self.assertEqual(len(batch.validate_plan(plan)), 12)
+        self.assertEqual(plan['daily_review_manifest'], str(review))
+        self.assertFalse({e['prompt_id'] for e in previous['executions']} &
+                         {e['prompt_id'] for e in plan['executions']})
+        self.assertNotIn('daily_review_manifest', previous)
+        self.assertEqual(len(batch.validate_plan(previous)), 12)
+        with self.assertRaises(ValueError):
+            batch.build_gemini4_daily_plan('gemini-4-carbon', review)
+        for path in (Path('/tmp/review-20261128.json'), Path('docs/gemini4-daily/../review-20261128.json')):
+            with self.assertRaises(ValueError):
+                batch.daily_review_path(path)
+        changed = deepcopy(plan)
+        changed.pop('daily_review_manifest')
+        with self.assertRaises(ValueError):
+            batch.validate_plan(changed)
+
     def test_daily_identity_and_prior_manifest(self):
         previous = batch.GEMINI4_REVIEW.read_bytes()
         old_ids = set(json.loads(previous)['prompt_ids'])
@@ -64,7 +84,13 @@ class DailyTests(unittest.TestCase):
                         for _ in range(2):
                             self.assertEqual(batch.run_batch(plan, Path(model), Path(folder), {'gemini':'fixture'}, url=dsn), 0)
                     self.assertEqual(request.call_count, 48)
-                self.assertEqual(len(list(Path(folder).glob('live/collection/*/*/response.json'))), 48)
+                    for model in sorted(batch.GEMINI4_MODELS):
+                        plan = batch.build_gemini4_daily_plan(model, Path('docs/gemini4-daily/review-20261128.json'))
+                        plan['transport_timeout_ms'] = 180_000
+                        for _ in range(2):
+                            self.assertEqual(batch.run_batch(plan, Path(model + '-dated'), Path(folder), {'gemini':'fixture'}, url=dsn), 0)
+                    self.assertEqual(request.call_count, 84)
+                self.assertEqual(len(list(Path(folder).glob('live/collection/*/*/response.json'))), 84)
         finally:
             with psycopg.connect(base, autocommit=True) as conn:
                 conn.execute(sql.SQL('DROP SCHEMA {} CASCADE').format(sql.Identifier(schema)))

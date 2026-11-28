@@ -38,11 +38,24 @@ GEMINI4_DAILY_REVIEW = Path("docs/gemini4-daily/review-manifest.json")
 GEMINI4_DAILY_MODELS = GEMINI4_MODELS | {"gemini-4-carbon"}
 
 
-def build_gemini4_daily_plan(model_id: str) -> dict:
+def daily_review_path(path: Path) -> Path:
+    """Restrict review selection to the project's saved daily manifests."""
+    directory = GEMINI4_DAILY_REVIEW.parent
+    if (path.resolve().parent != directory.resolve()
+            or (path.name != GEMINI4_DAILY_REVIEW.name
+                and not re.fullmatch(r"review-[0-9]{8}\.json", path.name))):
+        raise ValueError("Daily review must be a saved manifest under docs/gemini4-daily")
+    return directory / path.name
+
+
+def build_gemini4_daily_plan(model_id: str, review_path: Path = GEMINI4_DAILY_REVIEW) -> dict:
     """Build a separate twelve-question daily cohort without changing prior plans."""
     if model_id not in GEMINI4_DAILY_MODELS:
         raise ValueError("Unsupported Gemini 4 daily model")
-    review = read_object(GEMINI4_DAILY_REVIEW.read_bytes())
+    review_path = daily_review_path(review_path)
+    review = read_object(review_path.read_bytes())
+    if model_id not in review["models"]:
+        raise ValueError("Model is excluded from the selected daily review")
     today = datetime.now(ZoneInfo("America/New_York")).date()
     plan = build_plan(today, 1, review["prompt_ids"], gemini_limit=8192)
     entries = []
@@ -55,8 +68,10 @@ def build_gemini4_daily_plan(model_id: str) -> dict:
         entry["request"]["model"] = model_id
         entries.append(entry)
     plan.update(executions=entries, cohort="gemini4-daily",
-                comparison_manifest_sha256=digest(GEMINI4_DAILY_REVIEW.read_bytes()),
+                comparison_manifest_sha256=digest(review_path.read_bytes()),
                 timing_deviation="Daily Gemini cohort uses recorded actual collection times")
+    if review_path != GEMINI4_DAILY_REVIEW:
+        plan["daily_review_manifest"] = str(review_path)
     return plan
 
 
@@ -166,10 +181,15 @@ def validate_plan(plan: dict) -> list[dict]:
     if type(timeout_ms) is not int or timeout_ms not in ((90_000, 180_000) if daily else (90_000,)):
         raise ValueError("Unsupported transport timeout for this cohort")
     if comparison or daily:
-        manifest_path = GEMINI4_DAILY_REVIEW if daily else GEMINI4_REVIEW
+        manifest_path = (daily_review_path(Path(plan.get("daily_review_manifest", GEMINI4_DAILY_REVIEW)))
+                         if daily else GEMINI4_REVIEW)
         approved_models = GEMINI4_DAILY_MODELS if daily else GEMINI4_MODELS
         expected_count = 12 if daily else 24
         manifest = read_object(manifest_path.read_bytes())
+        if daily:
+            approved_models = set(manifest["models"])
+            if approved_models not in (GEMINI4_MODELS, GEMINI4_DAILY_MODELS):
+                raise ValueError("Unexpected daily model panel")
         model_ids = {e["requested_model"] for e in executions}
         ordered = manifest["prompt_ids"]
         selected = [e["prompt_id"] for e in executions]

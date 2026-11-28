@@ -64,6 +64,7 @@ def main() -> int:
     batch_input.add_argument("--gemini4-model", choices=sorted(GEMINI4_MODELS), help="Use the reviewed 24-question Carbon comparison")
     batch_input.add_argument("--gemini4-daily-model", choices=sorted(GEMINI4_DAILY_MODELS), help="Use the separate twelve-question daily Gemini cohort")
     batch.add_argument("--prompt-count", type=int, default=10)
+    batch.add_argument("--gemini4-daily-review", type=Path, help="Use a separately saved dated daily manifest")
     batch.add_argument("--prompt-id", action="append", default=[], help="Select explicit supplemental prompts")
     batch.add_argument("--gemini-output-tokens", type=int, choices=(2200, 8192), default=2200)
     batch.add_argument("--write-plan", type=Path, help="Save the reviewed preview as a new plan file")
@@ -90,7 +91,10 @@ def main() -> int:
                     raise ValueError("Use --write-plan in preview mode")
                 if args.live and args.prompt_id:
                     raise ValueError("Save and review a supplemental plan first, then use --plan with --live")
-                plan = (build_gemini4_daily_plan(args.gemini4_daily_model) if args.gemini4_daily_model else
+                if args.gemini4_daily_review and not args.gemini4_daily_model:
+                    raise ValueError("Select --gemini4-daily-model when choosing its review")
+                daily_options = {"review_path": args.gemini4_daily_review} if args.gemini4_daily_review else {}
+                plan = (build_gemini4_daily_plan(args.gemini4_daily_model, **daily_options) if args.gemini4_daily_model else
                         build_gemini4_plan(args.gemini4_model) if args.gemini4_model else
                         build_carbon_plan() if args.carbon_pilot else
                         read_object(args.plan.read_bytes()) if args.plan
